@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <rlgl.h>
+
 #include "./src/utils/drawUtils.c"
 
 int main()
@@ -11,13 +12,13 @@ int main()
 
 	Color bgColor = { 21, 30, 39, 255 };
 
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
 	InitWindow(windowWidth, windowHeight, "C Game of Life");
 	SetWindowMinSize(windowWidth, windowHeight);
 	SetTargetFPS(60);
 
 	Camera2D mainCamera = {0};
-	mainCamera.target =  (Vector2){ 0.0f, 0.0f };
+	mainCamera.target =  (Vector2){ -windowWidth/2, -windowHeight/2 }; // camera pivot, left top
 	mainCamera.zoom = 1.f;
 
 	while (!WindowShouldClose())
@@ -32,13 +33,11 @@ int main()
 		// draw game
 			// grid matrix
 		rlPushMatrix();
-			rlTranslatef(0, 25*50, 0);
-			rlRotatef(90, 1, 0, 0);
-			DrawCustomGrid(100, 50, (Vector3){0.2, 0.2, 0.7}, 2.f);
+			DrawUnifiedGrid2D(100, 10, (Color){80, 80, 150, 200}, 1.f);
 		rlPopMatrix();
 			// grid lines (with turn off)
 			// spawning cells
-		DrawCircle(100, 100, 50, YELLOW);
+		DrawCircle(100, 50, 50, YELLOW);
 		EndMode2D();
 		// postprocess
 		// draw UI

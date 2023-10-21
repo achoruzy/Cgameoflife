@@ -1,35 +1,26 @@
 #include <raylib.h>
 #include <rlgl.h>
 
-// Draw a grid
-static void DrawCustomGrid(int slices, float spacing, Vector3 color, float th)
+
+// Draw a unified 2D grid. 
+static void DrawUnifiedGrid2D(int size, float spacing, Color color, float thickness)
 {
-    int halfSlices = slices / 2;
+    float gridSize = size * spacing;
+    float halfGridSize = gridSize / 2;
 
     rlBegin(RL_LINES);
-    rlSetLineWidth(th);
-        for (int i = -halfSlices; i <= halfSlices; i++)
-        {
-            if (i == 0)
-            {
-                rlColor3f(0.5f, 0.5f, 0.5f);
-                rlColor3f(0.5f, 0.5f, 0.5f);
-                rlColor3f(0.5f, 0.5f, 0.5f);
-                rlColor3f(0.5f, 0.5f, 0.5f);
-            }
-            else
-            {
-                rlColor3f(0.75f, 0.75f, 0.75f);
-                rlColor3f(0.75f, 0.75f, 0.75f);
-                rlColor3f(0.75f, 0.75f, 0.75f);
-                rlColor3f(0.75f, 0.75f, 0.75f);
-            }
+    rlSetLineWidth(thickness);
+    rlColor4f(color.r, color.g, color.b, color.a);
 
-            rlVertex3f((float)i*spacing, 0.0f, (float)-halfSlices*spacing);
-            rlVertex3f((float)i*spacing, 0.0f, (float)halfSlices*spacing);
+    float ixspacing;
+    for (int i = 0; i <= size; i++) 
+    {
+        ixspacing = i * spacing;
+        rlVertex2f(0, ixspacing);
+        rlVertex2f(gridSize, ixspacing);
 
-            rlVertex3f((float)-halfSlices*spacing, 0.0f, (float)i*spacing);
-            rlVertex3f((float)halfSlices*spacing, 0.0f, (float)i*spacing);
-        }
+        rlVertex2f(ixspacing, 0);
+        rlVertex2f(ixspacing, gridSize);
+    }
     rlEnd();
 }
