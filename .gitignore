@@ -1,3 +1,10 @@
+# USER DEFINED
+test.exe
+/include
+/lib
+/build
+.vscode/
+
 # Prerequisites
 *.d
 
@@ -23,7 +30,6 @@
 *.lo
 
 # Shared objects (inc. Windows DLLs)
-*.dll
 *.so
 *.so.*
 *.dylib

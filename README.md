@@ -1,2 +1,3 @@
 # Cgameoflife
-Convay's Game of Life implementation in C
+
+A simple C + Raylib project presenting Convay's game of life.
