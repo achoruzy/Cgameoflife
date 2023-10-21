@@ -4,6 +4,8 @@
 #include <rlgl.h>
 
 #include "./src/draw/grid.c"
+#include "./src/draw/cell.c"
+#include "./src/ui/debug.c"
 
 int main()
 {
@@ -21,9 +23,18 @@ int main()
 	mainCamera.target =  (Vector2){ -windowWidth/2, -windowHeight/2 }; // camera pivot, left top
 	mainCamera.zoom = 1.f;
 
+	// Runtime config
+	float spacing = 10;
+	int gridSize = 100;
+	Color gridColor = {100, 100, 100, 200};
+	float gridThickness = .2f;
+
 	while (!WindowShouldClose())
     {
 		if (IsKeyPressed(299)) ToggleFullscreen(); // TODO: resize window with fullscreen and get back
+
+		if (IsMouseButtonDown(1)) mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta());
+
 		// get input
 		// use input (UI logic and gameplay)
 
@@ -32,28 +43,17 @@ int main()
 		ClearBackground(bgColor);
 		// draw game
 			// grid matrix
-		int spacing = 10;
-		DrawUnifiedGrid2D(100, spacing, (Color){100, 100, 100, 200}, .2f, true);
+		DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);
 			// grid lines (with turn off)
 			// spawning cells
-		int column = 0;
-		int row = 0;
-		float dilatation = 0.05f;
-		Rectangle cell = {
-			0+dilatation+column*spacing,
-			0+dilatation+column*spacing,
-			spacing-2*dilatation,
-			spacing-2*dilatation
-			};
-		
-		DrawRectangleRounded(cell, 0.3, 2, WHITE);
-
+		DrawCell(spacing);
 
 		DrawCircle(100, 50, 50, YELLOW);
 		DrawCircleLines(0, 0, 30, RED);
 		EndMode2D();
 		// postprocess
 		// draw UI
+		DrawFPS(10, 10);
 		EndDrawing();
 	}
 	CloseWindow();
