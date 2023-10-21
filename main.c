@@ -3,7 +3,7 @@
 #include <raymath.h>
 #include <rlgl.h>
 
-#include "./src/utils/drawUtils.c"
+#include "./src/draw/grid.c"
 
 int main()
 {
@@ -32,12 +32,25 @@ int main()
 		ClearBackground(bgColor);
 		// draw game
 			// grid matrix
-		rlPushMatrix();
-			DrawUnifiedGrid2D(100, 10, (Color){80, 80, 150, 200}, 1.f);
-		rlPopMatrix();
+		int spacing = 10;
+		DrawUnifiedGrid2D(100, spacing, (Color){100, 100, 100, 200}, .2f, true);
 			// grid lines (with turn off)
 			// spawning cells
+		int column = 0;
+		int row = 0;
+		float dilatation = 0.05f;
+		Rectangle cell = {
+			0+dilatation+column*spacing,
+			0+dilatation+column*spacing,
+			spacing-2*dilatation,
+			spacing-2*dilatation
+			};
+		
+		DrawRectangleRounded(cell, 0.3, 2, WHITE);
+
+
 		DrawCircle(100, 50, 50, YELLOW);
+		DrawCircleLines(0, 0, 30, RED);
 		EndMode2D();
 		// postprocess
 		// draw UI
