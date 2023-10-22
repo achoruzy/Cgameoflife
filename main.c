@@ -42,7 +42,9 @@ int main()
 	float gridThickness = .2f;
 
 	// Logic
-	Cell* cellArray = CellArray(8);
+	int cellArrayLength = 0;
+	Cell* cellArray = CellArray(cellArrayLength);
+	// Cell cellArray[32];
 
 	while (!WindowShouldClose())
     {
@@ -53,11 +55,41 @@ int main()
 		if (IsKeyPressed(299)) ToggleFullscreen(); // TODO: resize window with fullscreen and get back
 		if (IsMouseButtonDown(1)) mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta()); // TODO: limit to grid size
 
+		if (IsMouseButtonDown(0)) // can add or remove at least one 
+		{
+			// check for already exist and remove cell
+			bool removed = false;
+			for (int i = 0; i < cellArrayLength; i++)
+			{
+				Cell* current = cellArray + i;
+				if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
+				{
+					// remove
+					cellArrayLength--;
+					removed = true;
+				}
+			}
+
+			// append
+			if (!removed)
+			{
+				cellArrayLength++;
+				Cell* newArray = CellArray(cellArrayLength);
+
+				for (int i = 0; i < cellArrayLength - 1; i++)
+				{
+					newArray[i] = cellArray[i];
+				}
+				newArray[cellArrayLength - 1] = (Cell){mouseGridPos.x, mouseGridPos.y, false, 0};
+				
+				free(cellArray);
+				cellArray = newArray;
+			}
+		}
+
 		// printf("x: %f, y: %f\n",mouseWorldPos.x,mouseWorldPos.y);
 		// printf("x: %f, y: %f\n", mouseGridPos.x * spacing, mouseGridPos.y * spacing);
-
-		// use input (UI logic and gameplay)
-
+		
 		// draw game
 		BeginDrawing();
 		BeginMode2D(mainCamera);
@@ -66,12 +98,15 @@ int main()
 		DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true); // TODO: Toggle grid visibility
 		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY); // TODO: Refactor to hoover function
 
-		if (IsMouseButtonDown(0))
+		// game of life logic
+
+		// visualize current cells state
+		for (int i = 0; i < cellArrayLength; i++)
 		{
-			// draw cell
-			DrawCell(mouseGridPos, spacing);
+			Cell current = cellArray[i];
+			if (!current.isDead) DrawCell((Vector2){current.x, current.y}, spacing);
+			// printf("%i, %i, %i, %i\n", current.x, current.y, current.isDead, current.neighbours);
 		}
-		DrawCell(Vector2Zero(), spacing);
 
 		EndMode2D();
 		// postprocess

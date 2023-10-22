@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdlib.h>
 
 // Cell struct with x, y, isDead
 
@@ -13,10 +14,10 @@ Cell* CellArray(int size)
 {
     Cell* cellPtr;
     cellPtr = (Cell*)calloc(size, sizeof(Cell));
-    cellPtr->x = (int)malloc(sizeof(int));
-    cellPtr->y = (int)malloc(sizeof(int));
-    cellPtr->isDead = (bool)malloc(sizeof(bool));
-    cellPtr->y = (int)malloc(sizeof(int));
+    // cellPtr->x = (int)malloc(sizeof(int));
+    // cellPtr->y = (int)malloc(sizeof(int));
+    // cellPtr->isDead = (bool)malloc(sizeof(bool));
+    // cellPtr->neighbours = (int)malloc(sizeof(int));
     return cellPtr;
 }
 
