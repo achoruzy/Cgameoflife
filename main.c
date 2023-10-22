@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <math.h>
 
 #include <raylib.h>
@@ -8,6 +9,7 @@
 #include "./src/draw/grid.c"
 #include "./src/draw/cell.c"
 #include "./src/ui/debug.c"
+#include "./src/logic/logic.c"
 
 
 Vector2 WorldToGrid(Vector2 worldPos, float gridSpacing) // TODO: Refactor to other place
@@ -38,6 +40,9 @@ int main()
 	int gridSize = 100;
 	Color gridColor = {100, 100, 100, 200};
 	float gridThickness = .2f;
+
+	// Logic
+	Cell* cellArray = CellArray(8);
 
 	while (!WindowShouldClose())
     {
