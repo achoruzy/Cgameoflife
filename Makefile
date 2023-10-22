@@ -3,7 +3,7 @@ OUT=".\bin\Cbuoy.exe"
 cmake:
 	cmake -S . -B ./build -G "Unix Makefiles"
 
-make: 
+compile: 
 	make -C ./build
 
 run:

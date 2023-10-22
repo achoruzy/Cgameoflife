@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <math.h>
+
 #include <raylib.h>
 #include <raymath.h>
 #include <rlgl.h>
@@ -6,6 +8,14 @@
 #include "./src/draw/grid.c"
 #include "./src/draw/cell.c"
 #include "./src/ui/debug.c"
+
+
+Vector2 WorldToGrid(Vector2 worldPos, float gridSpacing)
+{
+	float x = round(worldPos.x / gridSpacing);
+	float y = round(worldPos.y / gridSpacing);
+	return (Vector2){x, y};
+}
 
 int main()
 {
@@ -31,9 +41,19 @@ int main()
 
 	while (!WindowShouldClose())
     {
-		if (IsKeyPressed(299)) ToggleFullscreen(); // TODO: resize window with fullscreen and get back
+		Vector2 mouseScreenPos = GetMousePosition();
+		Vector2 mouseWorldPos = GetScreenToWorld2D(mouseScreenPos, mainCamera);
 
-		if (IsMouseButtonDown(1)) mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta());
+		if (IsKeyPressed(299)) ToggleFullscreen(); // TODO: resize window with fullscreen and get back
+		if (IsMouseButtonDown(1)) mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta()); // TODO: limit to grid size
+
+		Vector2 mouseGridPos = WorldToGrid(mouseWorldPos, spacing);
+
+		// printf("x: %f, y: %f\n",mouseWorldPos.x,mouseWorldPos.y);
+		printf("x: %f, y: %f\n", mouseGridPos.x * spacing, mouseGridPos.y * spacing);
+			// get mouse pos
+			// mouse pos to grid pos
+
 
 		// get input
 		// use input (UI logic and gameplay)
@@ -46,10 +66,18 @@ int main()
 		DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);
 			// grid lines (with turn off)
 			// spawning cells
-		DrawCell(spacing);
 
-		DrawCircle(100, 50, 50, YELLOW);
-		DrawCircleLines(0, 0, 30, RED);
+		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY);
+
+		if (IsMouseButtonDown(0))
+		{
+			// draw cell
+			DrawCell(mouseGridPos, spacing);
+		}
+		DrawCell(Vector2Zero(), spacing);
+
+		// DrawCircle(100, 50, 50, YELLOW);
+		// DrawCircleLines(0, 0, 30, RED);
 		EndMode2D();
 		// postprocess
 		// draw UI
