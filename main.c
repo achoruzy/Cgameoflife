@@ -83,7 +83,7 @@ int main()
 				newArray[cellArrayLength - 1] = (Cell){mouseGridPos.x, mouseGridPos.y, false, 0};
 				
 				free(cellArray);
-				cellArray = newArray;
+				cellArray = newArray; // newArray not to free here as cellArray gots the address
 			}
 		}
 
@@ -114,6 +114,9 @@ int main()
 		DrawFPS(10, 10);
 		EndDrawing();
 	}
+	// Heap cleanup
+	free(cellArray);
+
 	CloseWindow();
 	return 0;
 }
