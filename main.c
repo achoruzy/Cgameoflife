@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include <raylib.h>
 #include <raymath.h>
 #include <rlgl.h>
 
-#include "./src/draw/grid.c"
-#include "./src/draw/cell.c"
-#include "./src/ui/debug.c"
-#include "./src/logic/logic.c"
+#include "./src/draw/draw_grid.c"
+#include "./src/draw/draw_cell.c"
+#include "./src/input/cells.c"
+#include "./src/logic/logic.h"
 
 
 Vector2 WorldToGrid(Vector2 worldPos, float gridSpacing) // TODO: Refactor to other place
@@ -57,34 +58,35 @@ int main()
 
 		if (IsMouseButtonDown(0)) // can add or remove at least one 
 		{
-			// check for already exist and remove cell
-			bool removed = false;
-			for (int i = 0; i < cellArrayLength; i++)
-			{
-				Cell* current = cellArray + i;
-				if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
-				{
-					// remove
-					cellArrayLength--;
-					removed = true;
-				}
-			}
+			UpdateCellArray(cellArray, &cellArrayLength, &mouseGridPos);
+			// // check for already exist and remove cell
+			// bool removed = false;
+			// for (int i = 0; i < cellArrayLength; i++)
+			// {
+			// 	Cell* current = cellArray + i;
+			// 	if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
+			// 	{
+			// 		// remove
+			// 		cellArrayLength--;
+			// 		removed = true;
+			// 	}
+			// }
 
-			// append
-			if (!removed)
-			{
-				cellArrayLength++;
-				Cell* newArray = CellArray(cellArrayLength);
+			// // append
+			// if (!removed)
+			// {
+			// 	cellArrayLength++;
+			// 	Cell* newArray = CellArray(cellArrayLength);
 
-				for (int i = 0; i < cellArrayLength - 1; i++)
-				{
-					newArray[i] = cellArray[i];
-				}
-				newArray[cellArrayLength - 1] = (Cell){mouseGridPos.x, mouseGridPos.y, false, 0};
+			// 	for (int i = 0; i < cellArrayLength - 1; i++)
+			// 	{
+			// 		newArray[i] = cellArray[i];
+			// 	}
+			// 	newArray[cellArrayLength - 1] = (Cell){mouseGridPos.x, mouseGridPos.y, false, 0};
 				
-				free(cellArray);
-				cellArray = newArray; // newArray not to free here as cellArray gots the address
-			}
+			// 	free(cellArray);
+			// 	cellArray = newArray; // newArray not to free here as cellArray gots the address
+			// }
 		}
 
 		// printf("x: %f, y: %f\n",mouseWorldPos.x,mouseWorldPos.y);
