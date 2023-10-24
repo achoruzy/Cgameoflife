@@ -1,5 +1,8 @@
+// Copyright (C) Arkadiusz Choruży
+
 #include <raylib.h>
 #include <rlgl.h>
+#include "draw_cell.h"
 
 void DrawCell(Vector2 gridPos, float spacing)
 {

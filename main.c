@@ -1,3 +1,5 @@
+// Copyright (C) Arkadiusz Choruży
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
@@ -7,10 +9,10 @@
 #include <raymath.h>
 #include <rlgl.h>
 
-#include "./src/draw/draw_grid.c"
-#include "./src/draw/draw_cell.c"
-#include "./src/input/cells.c"
 #include "./src/logic/logic.h"
+#include "./src/draw/draw_grid.h"
+#include "./src/draw/draw_cell.h"
+#include "./src/input/cells.h"
 
 
 Vector2 WorldToGrid(Vector2 worldPos, float gridSpacing) // TODO: Refactor to other place
@@ -45,7 +47,6 @@ int main()
 	// Logic
 	int cellArrayLength = 0;
 	Cell* cellArray = CellArray(cellArrayLength);
-	// Cell cellArray[32];
 
 	while (!WindowShouldClose())
     {
@@ -58,39 +59,8 @@ int main()
 
 		if (IsMouseButtonDown(0)) // can add or remove at least one 
 		{
-			UpdateCellArray(cellArray, &cellArrayLength, &mouseGridPos);
-			// // check for already exist and remove cell
-			// bool removed = false;
-			// for (int i = 0; i < cellArrayLength; i++)
-			// {
-			// 	Cell* current = cellArray + i;
-			// 	if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
-			// 	{
-			// 		// remove
-			// 		cellArrayLength--;
-			// 		removed = true;
-			// 	}
-			// }
-
-			// // append
-			// if (!removed)
-			// {
-			// 	cellArrayLength++;
-			// 	Cell* newArray = CellArray(cellArrayLength);
-
-			// 	for (int i = 0; i < cellArrayLength - 1; i++)
-			// 	{
-			// 		newArray[i] = cellArray[i];
-			// 	}
-			// 	newArray[cellArrayLength - 1] = (Cell){mouseGridPos.x, mouseGridPos.y, false, 0};
-				
-			// 	free(cellArray);
-			// 	cellArray = newArray; // newArray not to free here as cellArray gots the address
-			// }
+			cellArray = UpdateCellArray(cellArray, &cellArrayLength, mouseGridPos);
 		}
-
-		// printf("x: %f, y: %f\n",mouseWorldPos.x,mouseWorldPos.y);
-		// printf("x: %f, y: %f\n", mouseGridPos.x * spacing, mouseGridPos.y * spacing);
 		
 		// draw game
 		BeginDrawing();
@@ -107,7 +77,6 @@ int main()
 		{
 			Cell current = cellArray[i];
 			if (!current.isDead) DrawCell((Vector2){current.x, current.y}, spacing);
-			// printf("%i, %i, %i, %i\n", current.x, current.y, current.isDead, current.neighbours);
 		}
 
 		EndMode2D();

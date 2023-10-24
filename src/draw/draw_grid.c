@@ -1,8 +1,12 @@
+// Copyright (C) Arkadiusz Choruży
+
+#include <stdbool.h>
 #include <raylib.h>
+#include "draw_grid.h"
+
 #include <rlgl.h>
 
 
-// Draw a unified 2D grid. 
 static void DrawUnifiedGrid2D(int size, float spacing, Color color, float thickness, bool centered)
 {
     float gridSize = size * spacing;

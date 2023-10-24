@@ -1,6 +1,9 @@
+// Copyright (C) Arkadiusz Choruży
+
 #include <stdbool.h>
+#include "logic.h"
+
 #include <stdlib.h>
-#include "../logic/logic.h"
 
 Cell* CellArray(int size)
 {

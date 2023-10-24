@@ -30,13 +30,22 @@ set(SOURCES
     ./main.c
 )
 set(HEADERS
-
+    src/logic/logic.h
+    src/draw/draw_cell.h
+    src/draw/draw_grid.h
+    src/input/cells.h
 )
-set(CLASSES
-
+set(CFILES
+    src/logic/logic.c
+    src/draw/draw_cell.c
+    src/draw/draw_grid.c
+    src/input/cells.c
 )
 
-include_directories(.)
-add_executable(${PROJECT_NAME} ${SOURCES})
+# file(GLOB_RECURSE sources src/*.c src/*.h main.c)
+
+include_directories(${PROJECT_SOURCE_DIR}/src)
+add_executable(${PROJECT_NAME} ${CFILES} ${SOURCES} ${HEADERS})
+# add_executable(${PROJECT_NAME} ${sources})
 
 target_link_libraries(${PROJECT_NAME} raylib)

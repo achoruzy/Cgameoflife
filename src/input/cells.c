@@ -1,9 +1,14 @@
-#include <stdbool.h>
-#include <raylib.h>
+// Copyright (C) Arkadiusz Choruży
+
+
+#include "cells.h"
 #include "../logic/logic.h"
+#include <stdbool.h>
+#include <stdlib.h>
+#include <raylib.h>
 
 
-Cell* UpdateCellArray(Cell* cellArray, int* cellArrayLengthPtr, Vector2* mouseGridPos)
+Cell* UpdateCellArray(Cell* cellArray, int* cellArrayLengthPtr, Vector2 mouseGridPos)
 {
     // check for already exist and remove cell
     bool removed = false;
@@ -11,7 +16,7 @@ Cell* UpdateCellArray(Cell* cellArray, int* cellArrayLengthPtr, Vector2* mouseGr
     for (int i = 0; i < *cellArrayLengthPtr; i++)
     {
         Cell* current = cellArray + i;
-        if (current->x == (int)mouseGridPos->x && current->y == (int)mouseGridPos->y)
+        if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
         {
             // remove
             (*cellArrayLengthPtr)--;
@@ -28,8 +33,7 @@ Cell* UpdateCellArray(Cell* cellArray, int* cellArrayLengthPtr, Vector2* mouseGr
         {
             newArray[i] = cellArray[i];
         }
-        // printf("%i", mouseGridPos->x);
-        newArray[*cellArrayLengthPtr - 1] = (Cell){mouseGridPos->x, mouseGridPos->y, false, 0};
+        newArray[*cellArrayLengthPtr - 1] = (Cell){mouseGridPos.x, mouseGridPos.y, false, 0};
         
         free(cellArray);
         cellArray = newArray; // newArray not to free here as cellArray gots the address

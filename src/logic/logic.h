@@ -1,5 +1,7 @@
-#ifndef LOGIC
-#define LOGIC
+// Copyright (C) Arkadiusz Choruży
+
+#ifndef LOGIC_H_
+#define LOGIC_H_
 
 // Cell struct with x, y, isDead
 typedef struct Cell {
@@ -9,6 +11,7 @@ typedef struct Cell {
     int neighbours;
 } Cell;
 
-Cell* CellArray(int size){}
+// Function for creting CellArray struct variable
+Cell* CellArray(int size);
 
 #endif
