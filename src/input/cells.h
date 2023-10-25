@@ -4,7 +4,7 @@
 #ifndef CELLS_H_
 #define CELLS_H_
 
-#include "../logic/logic.h"
+#include "../logic/cell.h"
 
 #include <raylib.h>
 #include <stdlib.h>

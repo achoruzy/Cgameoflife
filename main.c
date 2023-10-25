@@ -9,7 +9,7 @@
 #include <raymath.h>
 #include <rlgl.h>
 
-#include "./src/logic/logic.h"
+#include "./src/logic/cell.h"
 #include "./src/draw/draw_grid.h"
 #include "./src/draw/draw_cell.h"
 #include "./src/input/cells.h"

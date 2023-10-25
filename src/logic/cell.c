@@ -1,7 +1,7 @@
 // Copyright (C) Arkadiusz Choruży
 
 
-#include "logic.h"
+#include "cell.h"
 
 
 Cell* CellArray(int size)
