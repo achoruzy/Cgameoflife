@@ -2,10 +2,6 @@
 
 
 #include "cells.h"
-#include "../logic/logic.h"
-#include <stdbool.h>
-#include <stdlib.h>
-#include <raylib.h>
 
 
 Cell* UpdateCellArray(Cell* cellArray, int* cellArrayLengthPtr, Vector2 mouseGridPos)
@@ -18,7 +14,7 @@ Cell* UpdateCellArray(Cell* cellArray, int* cellArrayLengthPtr, Vector2 mouseGri
         Cell* current = cellArray + i;
         if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
         {
-            // remove
+            // TODO: remove works now as UNDO
             (*cellArrayLengthPtr)--;
             removed = true;
         }

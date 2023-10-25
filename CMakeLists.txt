@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.26.0)
 project(Cbuoy)
 set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../include)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib)
+# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../include)
+# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 
 # raylib
@@ -26,26 +26,12 @@ if (NOT raylib_FOUND)
     endif ()
 endif ()
 
-set(SOURCES
-    ./main.c
-)
-set(HEADERS
-    src/logic/logic.h
-    src/draw/draw_cell.h
-    src/draw/draw_grid.h
-    src/input/cells.h
-)
-set(CFILES
-    src/logic/logic.c
-    src/draw/draw_cell.c
-    src/draw/draw_grid.c
-    src/input/cells.c
-)
+add_executable(${PROJECT_NAME} main.c)
 
-# file(GLOB_RECURSE sources src/*.c src/*.h main.c)
+file(GLOB_RECURSE SOURCE_FILES "src/*.c")
+file(GLOB_RECURSE HEADER_FILES "src/*.h")
 
-include_directories(${PROJECT_SOURCE_DIR}/src)
-add_executable(${PROJECT_NAME} ${CFILES} ${SOURCES} ${HEADERS})
-# add_executable(${PROJECT_NAME} ${sources})
+target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES} ${HEADER_FILES})
+target_include_directories(${PROJECT_NAME} PRIVATE src)
 
 target_link_libraries(${PROJECT_NAME} raylib)
