@@ -6,6 +6,6 @@
 
 #include "cell.h"
 
-void ObeyRules(Cell* cell, int num_neighbors);
+bool TryObeyRules(Cell* cell, int num_neighbors);
 
 #endif
