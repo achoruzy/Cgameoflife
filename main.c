@@ -57,7 +57,7 @@ int main()
 		if (IsKeyPressed(299)) ToggleFullscreen(); // TODO: resize window with fullscreen and get back
 		if (IsMouseButtonDown(1)) mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta()); // TODO: limit to grid size
 
-		if (IsMouseButtonDown(0)) // can add or remove at least one 
+		if (IsMouseButtonPressed(0)) // can add or remove at least one 
 		{
 			cellArray = UpdateCellArray(cellArray, &cellArrayLength, mouseGridPos);
 		}

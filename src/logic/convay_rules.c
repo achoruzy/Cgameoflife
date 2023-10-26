@@ -21,8 +21,4 @@ bool TryObeyRules(Cell* cell, int num_neighbors)
         cell->isDead == true;
         break;
     }
-
-
-
-
 }
