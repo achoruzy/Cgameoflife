@@ -18,6 +18,6 @@ typedef struct {
 Cell* CellArray(int size);
 
 // Calculates number of cell neighbors
-int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray);
+int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray, int* cellArrayLengthPtr);
 
 #endif
