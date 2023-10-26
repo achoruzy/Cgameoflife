@@ -36,4 +36,5 @@ int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray, int* cellArrayLeng
             if (y == cell_y || y == cell_y-1 || y == cell_y +1) count++;
         }
     }
+    return count;
 }
