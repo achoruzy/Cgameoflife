@@ -11,7 +11,7 @@ Cell* CellArray(int size)
     return cellPtr;
 }
 
-int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray, int* cellArrayLengthPtr)
+int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray, int cellArrayLengthPtr)
 {
     /* cases
     N -> x, y-1
@@ -24,7 +24,7 @@ int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray, int* cellArrayLeng
     SE -> x+1, y+1
     */
     int count = 0;
-    for (int i = 0; i < *cellArrayLengthPtr - 1; i++)
+    for (int i = 0; i < cellArrayLengthPtr - 1; i++)
     {
         int x = cellArray[i].x;
         int y = cellArray[i].y;

@@ -5,20 +5,25 @@
 
 bool TryObeyRules(Cell* cell, int num_neighbors)
 {
+    // renew
     if (cell->isDead == true && num_neighbors == 3) 
     {
         cell->isDead = false;
+        return true;
     }
 
-    if (cell->isDead == false) return false;
+    // kill definitely
+    if (cell->isDead == true) return false;
 
     switch (num_neighbors)
     {
     case 2:
     case 3:
+    cell->isDead = false;
         break;
-    default:
-        cell->isDead == true;
+    default: // kill temporary
+        cell->isDead = true;
         break;
     }
+    return true;
 }

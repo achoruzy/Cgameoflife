@@ -10,6 +10,7 @@
 #include <rlgl.h>
 
 #include "./src/logic/cell.h"
+#include "./src/logic/convay_rules.h"
 #include "./src/draw/draw_grid.h"
 #include "./src/draw/draw_cell.h"
 #include "./src/input/cells.h"
@@ -48,6 +49,9 @@ int main()
 	int cellArrayLength = 0;
 	Cell* cellArray = CellArray(cellArrayLength);
 
+	// UI flags
+	bool isPause = true;
+
 	while (!WindowShouldClose())
     {
 		Vector2 mouseScreenPos = GetMousePosition();
@@ -56,6 +60,7 @@ int main()
 
 		if (IsKeyPressed(299)) ToggleFullscreen(); // TODO: resize window with fullscreen and get back
 		if (IsMouseButtonDown(1)) mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta()); // TODO: limit to grid size
+		if (IsKeyPressed(KEY_SPACE)) isPause = !isPause;
 
 		if (IsMouseButtonPressed(0)) // can add or remove at least one 
 		{
@@ -71,6 +76,28 @@ int main()
 		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY); // TODO: Refactor to hoover function
 
 		// game of life logic
+		int newLen = 0;
+		Cell* drawArray = CellArray(cellArrayLength);
+		if (!isPause)
+		{
+			for (int i = 0; i < cellArrayLength; i++)
+			{
+				Cell current = cellArray[i];
+				int cellNeighbors = CellNeighborsQty(current.x, current.y, cellArray, cellArrayLength);
+				bool isCellObeyRules = TryObeyRules(&current, cellNeighbors);
+
+				if (isCellObeyRules)
+				{
+					drawArray[newLen] = current;
+					newLen++;
+				}
+
+				printf("n: %i, isObey: %i, isDead: %i\n", cellNeighbors, isCellObeyRules, current.isDead);
+			}
+			free(cellArray);
+			cellArray = drawArray;
+			cellArrayLength = newLen;
+		}
 
 		// visualize current cells state
 		for (int i = 0; i < cellArrayLength; i++)
