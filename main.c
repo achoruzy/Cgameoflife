@@ -52,6 +52,9 @@ int main()
 	// UI flags
 	bool isPause = true;
 
+	// Time
+	double time = 0;
+
 	while (!WindowShouldClose())
     {
 		Vector2 mouseScreenPos = GetMousePosition();
@@ -75,11 +78,17 @@ int main()
 		DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true); // TODO: Toggle grid visibility
 		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY); // TODO: Refactor to hoover function
 
+		// Time management
+		time += GetTime();
+
 		// game of life logic
-		int newLen = 0;
+		int newArrayLenght = 0;
 		Cell* drawArray = CellArray(cellArrayLength);
-		if (!isPause)
+		
+		if (!isPause && time > 0.5)
 		{
+			time = 0;
+			// checking existing cells
 			for (int i = 0; i < cellArrayLength; i++)
 			{
 				Cell current = cellArray[i];
@@ -88,15 +97,53 @@ int main()
 
 				if (isCellObeyRules)
 				{
-					drawArray[newLen] = current;
-					newLen++;
+					drawArray[newArrayLenght] = current;
+					newArrayLenght++;
 				}
 
-				printf("n: %i, isObey: %i, isDead: %i\n", cellNeighbors, isCellObeyRules, current.isDead);
+				// printf("n: %i, isObey: %i, isDead: %i\n", cellNeighbors, isCellObeyRules, current.isDead);
 			}
+
+			// getting to life new cells
+			for (int i = 0; i < newArrayLenght; i++)
+			{
+				Cell current = drawArray[i];
+				for (int x = current.x - 1; x <= current.x + 1; x++)
+				{
+					for (int y = current.y - 1; y <= current.y + 1; y++)
+					{
+						// don't check current
+						if (x == 0 && y == 0) continue;
+
+						// don't check if cell is living
+						bool isNotEmpty = false;
+						for (int e = 0; e < newArrayLenght; e++) 
+						{
+							Cell possibleEmpty = drawArray[e];
+							if (possibleEmpty.x == x && possibleEmpty.y == y) 
+							{
+								isNotEmpty = true;
+								break;
+							}
+						}
+						if (isNotEmpty) continue;
+
+						// check empty cell if may live
+						int emptyCellNeighbors = CellNeighborsQty(current.x, current.y, cellArray, cellArrayLength);
+						if (emptyCellNeighbors == 3)
+						{
+							Cell newCell = (Cell) {x, y, true, emptyCellNeighbors};
+							drawArray[newArrayLenght] = newCell;
+							newArrayLenght++;
+							printf("%i, %i\n", x, y);
+						}
+					}
+				}
+			}
+
 			free(cellArray);
 			cellArray = drawArray;
-			cellArrayLength = newLen;
+			cellArrayLength = newArrayLenght;
 		}
 
 		// visualize current cells state
