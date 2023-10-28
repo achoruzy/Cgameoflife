@@ -1,17 +1,15 @@
 // Copyright (C) Arkadiusz Choruży
 
-
 #include "cell.h"
 
-
-Cell* CellArray(int size)
+Cell *CellArray(int size)
 {
-    Cell* cellPtr;
-    cellPtr = (Cell*)calloc(size, sizeof(Cell));
+    Cell *cellPtr;
+    cellPtr = (Cell *)calloc(size, sizeof(Cell));
     return cellPtr;
 }
 
-int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray, int cellArrayLengthPtr)
+int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLength)
 {
     /* cases
     N -> x, y-1
@@ -24,16 +22,18 @@ int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray, int cellArrayLengt
     SE -> x+1, y+1
     */
     int count = 0;
-    for (int i = 0; i < cellArrayLengthPtr - 1; i++)
+    for (int i = 0; i < cellArrayLength; i++)
     {
         int x = cellArray[i].x;
         int y = cellArray[i].y;
 
-        if (x == cell_x && y == cell_y) continue;
+        if (x == cell_x && y == cell_y)
+            continue;
 
-        if (x == cell_x || x == cell_x-1 || x == cell_x +1)
+        if (x == cell_x || x == cell_x - 1 || x == cell_x + 1)
         {
-            if (y == cell_y || y == cell_y-1 || y == cell_y +1) count++;
+            if (y == cell_y || y == cell_y - 1 || y == cell_y + 1)
+                count++;
         }
     }
     return count;
