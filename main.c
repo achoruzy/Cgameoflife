@@ -133,7 +133,7 @@ int main()
 
 						// check empty cell if may live
 						int emptyCellNeighbors = CellNeighborsQty(x, y, newArray, newArrayLenght);
-						if (emptyCellNeighbors == 3)
+						if (isToRevive(emptyCellNeighbors))
 						{
 							newArray[newArrayLenght] = (Cell){x, y, false, 3};
 							newArrayLenghtUpdate++;

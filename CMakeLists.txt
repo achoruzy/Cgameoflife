@@ -26,6 +26,8 @@ if (NOT raylib_FOUND)
     endif ()
 endif ()
 
+# APP EXECUTABLE
+
 add_executable(${PROJECT_NAME} main.c)
 
 file(GLOB_RECURSE SOURCE_FILES "src/*.c")

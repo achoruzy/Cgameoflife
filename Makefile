@@ -8,3 +8,8 @@ compile:
 
 run:
 	$(OUT)
+
+test_cmake:
+	cd test && cmake -S . -B ./build
+	cd test && make -C ./build
+	cd test/buid && ctest

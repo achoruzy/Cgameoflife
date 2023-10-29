@@ -3,6 +3,7 @@ test.exe
 /include
 /lib
 /build
+*/build
 .vscode/
 
 # Prerequisites
