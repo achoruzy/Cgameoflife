@@ -5,6 +5,5 @@
 
 void main()
 {
-    if (ASSERT_EQ(1, 1))
-        printf("true");
+    TEST(ASSERT_EQ(2, 2), "Equals");
 }
