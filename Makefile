@@ -1,4 +1,5 @@
 OUT=".\bin\Cbuoy.exe"
+TEST=".\test\bin\Cbuoy_test.exe"
 
 cmake:
 	cmake -S . -B ./build -G "Unix Makefiles"
@@ -12,10 +13,12 @@ compile:
 run:
 	$(OUT)
 
-test_cmake:
-	cd test && cmake -S . -B ./build
+test_compile:
+	cd test && cmake -S . -B ./build -G "Unix Makefiles"
 	cd test && make -C ./build
-	cd test/buid && ctest
+
+test_run:
+	$(TEST)
 
 gdb:
 	gdb ./bin/Cbuoy.exe
