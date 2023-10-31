@@ -17,7 +17,7 @@ bool TryObeyRules(Cell *cell, int num_neighbors)
 bool isToRevive(int num_neighbors) { return num_neighbors == 3; }
 
 // When cell has 2 or 3 neighbors only it may live
-static bool isToLive(int num_neighbors)
+bool isToLive(int num_neighbors)
 {
     if (num_neighbors == 2 || num_neighbors == 3)
         return true;

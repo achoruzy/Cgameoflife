@@ -15,8 +15,13 @@ void main()
          "convay_rules.c: isToRevive returns false if param <3");
     TEST(ASSERT_FALSE(isToRevive(4)),
          "convay_rules.c: isToRevive returns false if param >3");
-    TEST(ASSERT_FALSE(isToRevive(3)),
-         "convay_rules.c: isToRevive returns false if param >3");
+
+    TEST(ASSERT_TRUE(isToLive(2)),
+         "convay_rules.c: isToRevive returns true if param ==2");
+    TEST(ASSERT_TRUE(isToLive(3)),
+         "convay_rules.c: isToRevive returns true if param ==3");
+    TEST(ASSERT_FALSE(isToLive(0)),
+         "convay_rules.c: isToRevive returns false if param !=(0 || 3)");
 
     TEST_END();
 }

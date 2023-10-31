@@ -10,6 +10,6 @@
 bool TryObeyRules(Cell *cell, int num_neighbors);
 
 bool isToRevive(int num_neighbors);
-static bool isToLive(int num_neighbors);
+bool isToLive(int num_neighbors);
 
 #endif
