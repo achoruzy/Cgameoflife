@@ -11,6 +11,12 @@ add_executable(${PROJECT_NAME} test_main.c)
 # file(GLOB_RECURSE SOURCE_FILES "../src/*.c")
 # file(GLOB_RECURSE HEADER_FILES "../src/*.h")
 
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES} ${HEADER_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE .)
+set(HEADER_FILES
+    ../src/logic/convay_rules.h
+)
 
+set(SOURCE_FILES
+    ../src/logic/convay_rules.c
+)
+
+target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES} ${HEADER_FILES})
