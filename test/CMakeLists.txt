@@ -13,10 +13,12 @@ add_executable(${PROJECT_NAME} test_main.c)
 
 set(HEADER_FILES
     ../src/logic/convay_rules.h
+    ../src/logic/cell.h
 )
 
 set(SOURCE_FILES
     ../src/logic/convay_rules.c
+    ../src/logic/cell.c
 )
 
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES} ${HEADER_FILES})

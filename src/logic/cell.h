@@ -5,9 +5,11 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 // Cell struct with x, y, isDead
-typedef struct {
+typedef struct
+{
     int x;
     int y;
     bool isDead;
@@ -15,9 +17,9 @@ typedef struct {
 } Cell;
 
 // Function for creting CellArray struct variable
-Cell* CellArray(int size);
+Cell *CellArray(int size);
 
 // Calculates number of cell neighbors
-int CellNeighborsQty(int cell_x, int cell_y, Cell* cellArray, int cellArrayLengthPtr);
+int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengthPtr);
 
 #endif

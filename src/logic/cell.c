@@ -4,8 +4,12 @@
 
 Cell *CellArray(int size)
 {
-    Cell *cellPtr;
-    cellPtr = (Cell *)calloc(size, sizeof(Cell));
+    Cell *cellPtr = (Cell *)calloc(size, sizeof(Cell));
+    if (cellPtr == NULL)
+    {
+        printf("Error: Cell pointers occured NULL");
+        exit(EXIT_FAILURE);
+    }
     return cellPtr;
 }
 
