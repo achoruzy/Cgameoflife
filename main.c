@@ -10,10 +10,10 @@
 #include <rlgl.h>
 
 #include "./src/logic/cell.h"
+#include "./src/logic/cell_utils.h"
 #include "./src/logic/convay_rules.h"
 #include "./src/draw/draw_grid.h"
 #include "./src/draw/draw_cell.h"
-#include "./src/input/cells.h"
 
 Vector2 WorldToGrid(Vector2 worldPos, float gridSpacing) // TODO: Refactor to other place
 {
