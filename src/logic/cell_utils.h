@@ -16,6 +16,8 @@ Cell *CellArray(int size);
 // Updates main CellArray on user input
 Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos);
 
+Cell *ExtendArrayByCell(Cell *cellArray, int *cellArrayLengthPtr, int x, int y);
+
 // Calculates number of cell neighbors
 int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengthPtr);
 

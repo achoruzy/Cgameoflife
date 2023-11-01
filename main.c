@@ -40,13 +40,13 @@ int main()
 
 	// Logic
 	int cellArrayLength = 0;
-	Cell *cellArray = CellArray(cellArrayLength);
+	Cell *cellArrayPtr = CellArray(cellArrayLength);
 
 	// UI flags
 	bool isPause = true;
 
 	// Time
-	double time = 0;
+	double logicCooldown = 0;
 
 	while (!WindowShouldClose())
 	{
@@ -66,7 +66,7 @@ int main()
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can add or remove at least one
 		{
-			cellArray = UpdateCellArray(cellArray, &cellArrayLength, mouseGridPos);
+			cellArrayPtr = UpdateCellArray(cellArrayPtr, &cellArrayLength, mouseGridPos);
 		}
 
 		// draw game
@@ -78,25 +78,25 @@ int main()
 		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY); // TODO: Refactor to hoover function
 
 		// Time management
-		time += GetFrameTime();
+		logicCooldown += GetFrameTime();
 
 		// game of life logic
-		int newArrayLenght = 0;
-		Cell *newArray = CellArray(cellArrayLength);
+		int newArrayLenght = 1;
+		Cell *newArrayPtr = CellArray(cellArrayLength);
 
-		if (!isPause && time > 0.1)
+		if (!isPause && logicCooldown > 0.1)
 		{
-			time = 0;
+			logicCooldown = 0;
 			// checking existing cells
 			for (int i = 0; i < cellArrayLength; i++)
 			{
-				Cell current = cellArray[i];
-				int cellNeighbors = CellNeighborsQty(current.x, current.y, cellArray, cellArrayLength);
-				bool isCellObeyRules = TryObeyRules(&current, cellNeighbors);
+				Cell *currentPtr = &cellArrayPtr[i];
+				int cellNeighbors = CellNeighborsQty(currentPtr->x, currentPtr->y, cellArrayPtr, cellArrayLength);
+				bool isCellObeyRules = TryObeyRules(currentPtr, cellNeighbors);
 
 				if (isCellObeyRules)
 				{
-					newArray[newArrayLenght] = current;
+					newArrayPtr[newArrayLenght] = *currentPtr;
 					newArrayLenght++;
 				}
 			}
@@ -105,50 +105,52 @@ int main()
 			int newArrayLenghtUpdate = newArrayLenght;
 			for (int i = 0; i < newArrayLenght; i++)
 			{
-				Cell current = newArray[i];
-				for (int x = current.x - 1; x <= current.x + 1; x++)
+				Cell *currentPtr = &newArrayPtr[i];
+				for (int x = currentPtr->x - 1; x <= currentPtr->x + 1; x++)
 				{
-					for (int y = current.y - 1; y <= current.y + 1; y++)
+					for (int y = currentPtr->y - 1; y <= currentPtr->y + 1; y++)
 					{
-						// don't check current
+						// don't check current -> middle one in 3x3 around grid
 						if (x == 0 && y == 0)
 							continue;
 
-						// don't check if cell is living
-						bool isNotEmpty = false;
+						// don't check if cell is living -> is in array
+						bool isEmpty = true;
 						for (int e = 0; e < newArrayLenght; e++)
 						{
-							Cell possibleEmpty = newArray[e];
-							if (possibleEmpty.x == x && possibleEmpty.y == y)
+							Cell *possibleEmpty = &newArrayPtr[e];
+							if (possibleEmpty->x == x && possibleEmpty->y == y)
 							{
-								isNotEmpty = true;
+								isEmpty = false;
 								break;
 							}
 						}
-						if (isNotEmpty)
-							continue;
-
 						// check empty cell if may live
-						int emptyCellNeighbors = CellNeighborsQty(x, y, newArray, newArrayLenght);
-						if (isToRevive(emptyCellNeighbors))
+						if (isEmpty)
 						{
-							newArray[newArrayLenght] = (Cell){x, y, false, 3};
-							newArrayLenghtUpdate++;
+							int emptyCellNeighbors = CellNeighborsQty(x, y, newArrayPtr, newArrayLenght);
+							if (isToRevive(emptyCellNeighbors))
+							{
+								// extend array by cell
+								newArrayPtr[newArrayLenght].x = x;
+								newArrayPtr[newArrayLenght].y = y;
+								newArrayPtr[newArrayLenght].isDead = false;
+								newArrayPtr[newArrayLenght].neighbours = 3;
+								newArrayLenghtUpdate++;
+							}
 						}
 					}
 				}
 			}
-			newArrayLenght = newArrayLenghtUpdate;
-
-			free(cellArray);
-			cellArray = newArray;
-			cellArrayLength = newArrayLenght;
+			free(cellArrayPtr);
+			cellArrayPtr = newArrayPtr;
+			cellArrayLength = newArrayLenghtUpdate;
 		}
 
 		// visualize current cells state
 		for (int i = 0; i < cellArrayLength; i++)
 		{
-			Cell current = cellArray[i];
+			Cell current = cellArrayPtr[i];
 			if (!current.isDead)
 				DrawCell((Vector2){current.x, current.y}, spacing);
 		}
@@ -171,7 +173,7 @@ int main()
 		EndDrawing();
 	}
 	// Heap cleanup
-	free(cellArray);
+	free(cellArrayPtr);
 
 	CloseWindow();
 	return 0;
