@@ -54,14 +54,17 @@ int main()
 		Vector2 mouseWorldPos = GetScreenToWorld2D(mouseScreenPos, mainCamera);
 		Vector2 mouseGridPos = WorldToGrid(mouseWorldPos, spacing);
 
-		if (IsKeyPressed(299))
+		if (IsKeyPressed(KEY_F1))
 			ToggleFullscreen(); // TODO: resize window with fullscreen and get back
-		if (IsMouseButtonDown(1))
+		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 			mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta()); // TODO: limit to grid size
-		if (IsKeyPressed(KEY_SPACE))
-			isPause = !isPause;
 
-		if (IsMouseButtonPressed(0)) // can add or remove at least one
+		if (IsKeyPressed(KEY_SPACE))
+		{
+			isPause = !isPause;
+		}
+
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can add or remove at least one
 		{
 			cellArray = UpdateCellArray(cellArray, &cellArrayLength, mouseGridPos);
 		}
@@ -150,9 +153,20 @@ int main()
 				DrawCell((Vector2){current.x, current.y}, spacing);
 		}
 
-		EndMode2D();
 		// postprocess
 		// draw UI
+		{
+			Color color;
+			if (isPause)
+				color = RED;
+			else
+				color = GREEN;
+
+			Vector2 screenPos = GetScreenToWorld2D((Vector2){windowWidth - 50, windowHeight - 50}, mainCamera);
+			DrawCircle(screenPos.x, screenPos.y, 20.f, color);
+		}
+
+		EndMode2D();
 		DrawFPS(10, 10);
 		EndDrawing();
 	}
