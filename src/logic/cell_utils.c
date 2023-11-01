@@ -17,7 +17,7 @@ Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGri
 {
     // check for already exist and remove cell
     bool removed = false;
-
+    // printf("%i\n", *cellArrayLengthPtr);
     for (int i = 0; i < *cellArrayLengthPtr; i++)
     {
         Cell *current = cellArray + i;
