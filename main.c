@@ -58,35 +58,22 @@ int main()
 			ToggleFullscreen(); // TODO: resize window with fullscreen and get back
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 			mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta()); // TODO: limit to grid size
-
 		if (IsKeyPressed(KEY_SPACE))
-		{
 			isPause = !isPause;
-		}
-
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can add or remove at least one
-		{
 			cellArrayPtr = UpdateCellArray(cellArrayPtr, &cellArrayLength, mouseGridPos);
-		}
-
-		// draw game
-		BeginDrawing();
-		BeginMode2D(mainCamera);
-		ClearBackground(bgColor);
-
-		DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);								 // TODO: Toggle grid visibility
-		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY); // TODO: Refactor to hoover function
 
 		// Time management
 		logicCooldown += GetFrameTime();
 
-		// game of life logic
-		int newArrayLenght = 1;
-		Cell *newArrayPtr = CellArray(cellArrayLength);
+		// MAIN LOGIC
+		int updatedArrayLenght = 0;
+		Cell *updatedArrayPtr = CellArray(cellArrayLength);
 
 		if (!isPause && logicCooldown > 0.1)
 		{
 			logicCooldown = 0;
+
 			// checking existing cells
 			for (int i = 0; i < cellArrayLength; i++)
 			{
@@ -94,18 +81,18 @@ int main()
 				int cellNeighbors = CellNeighborsQty(currentPtr->x, currentPtr->y, cellArrayPtr, cellArrayLength);
 				bool isCellObeyRules = TryObeyRules(currentPtr, cellNeighbors);
 
-				if (isCellObeyRules)
+				if (isCellObeyRules) // if obey then it stays and appends to new array
 				{
-					newArrayPtr[newArrayLenght] = *currentPtr;
-					newArrayLenght++;
+					updatedArrayPtr[updatedArrayLenght] = *currentPtr;
+					updatedArrayLenght++;
 				}
 			}
 
 			// getting to life new cells
-			int newArrayLenghtUpdate = newArrayLenght;
-			for (int i = 0; i < newArrayLenght; i++)
+			int newArrayLenghtUpdate = updatedArrayLenght;
+			for (int i = 0; i < updatedArrayLenght; i++) // check around existing only
 			{
-				Cell *currentPtr = &newArrayPtr[i];
+				Cell *currentPtr = &updatedArrayPtr[i];
 				for (int x = currentPtr->x - 1; x <= currentPtr->x + 1; x++)
 				{
 					for (int y = currentPtr->y - 1; y <= currentPtr->y + 1; y++)
@@ -114,28 +101,13 @@ int main()
 						if (x == 0 && y == 0)
 							continue;
 
-						// don't check if cell is living -> is in array
-						bool isEmpty = true;
-						for (int e = 0; e < newArrayLenght; e++)
-						{
-							Cell *possibleEmpty = &newArrayPtr[e];
-							if (possibleEmpty->x == x && possibleEmpty->y == y)
-							{
-								isEmpty = false;
-								break;
-							}
-						}
 						// check empty cell if may live
-						if (isEmpty)
+						if (IsCellEmpty(cellArrayPtr, cellArrayLength, x, y))
 						{
-							int emptyCellNeighbors = CellNeighborsQty(x, y, newArrayPtr, newArrayLenght);
+							int emptyCellNeighbors = CellNeighborsQty(x, y, updatedArrayPtr, updatedArrayLenght);
 							if (isToRevive(emptyCellNeighbors))
 							{
-								// extend array by cell
-								newArrayPtr[newArrayLenght].x = x;
-								newArrayPtr[newArrayLenght].y = y;
-								newArrayPtr[newArrayLenght].isDead = false;
-								newArrayPtr[newArrayLenght].neighbours = 3;
+								UpdateOne(updatedArrayPtr, updatedArrayLenght, x, y, false, 3);
 								newArrayLenghtUpdate++;
 							}
 						}
@@ -143,9 +115,17 @@ int main()
 				}
 			}
 			free(cellArrayPtr);
-			cellArrayPtr = newArrayPtr;
+			cellArrayPtr = updatedArrayPtr;
 			cellArrayLength = newArrayLenghtUpdate;
 		}
+
+		// DRAW CANVAS
+		BeginDrawing();
+		BeginMode2D(mainCamera);
+		ClearBackground(bgColor);
+
+		DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);								 // TODO: Toggle grid visibility
+		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY); // TODO: Refactor to hoover function
 
 		// visualize current cells state
 		for (int i = 0; i < cellArrayLength; i++)
@@ -155,17 +135,13 @@ int main()
 				DrawCell((Vector2){current.x, current.y}, spacing);
 		}
 
-		// postprocess
-		// draw UI
-		{
-			Color color;
-			if (isPause)
-				color = RED;
-			else
-				color = GREEN;
+		// POSTPROCESS CANVAS
 
+		// DRAW UI
+		{
+			Color color = isPause ? RED : GREEN;
 			Vector2 screenPos = GetScreenToWorld2D((Vector2){windowWidth - 50, windowHeight - 50}, mainCamera);
-			DrawCircle(screenPos.x, screenPos.y, 20.f, color);
+			DrawCircle(screenPos.x, screenPos.y, 10.f, color);
 		}
 
 		EndMode2D();

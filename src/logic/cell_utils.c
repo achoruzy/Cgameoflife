@@ -17,7 +17,6 @@ Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGri
 {
     // check for already exist and remove cell
     bool removed = false;
-    // printf("%i\n", *cellArrayLengthPtr);
     for (int i = 0; i < *cellArrayLengthPtr; i++)
     {
         Cell *current = cellArray + i;
@@ -44,6 +43,25 @@ Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGri
         cellArray = newArray; // newArray not to free here as cellArray gots the address
     }
     return cellArray;
+}
+
+void UpdateOne(Cell *arrayPtr, int i, int x, int y, bool isDead, int neighbors)
+{
+    arrayPtr[i].x = x;
+    arrayPtr[i].y = y;
+    arrayPtr[i].isDead = isDead;
+    arrayPtr[i].neighbours = neighbors;
+}
+
+bool IsCellEmpty(Cell *arrayPtr, int lenght, int x, int y)
+{
+    for (int i = 0; i < lenght; i++)
+    {
+        Cell *possibleEmpty = &arrayPtr[i];
+        if (possibleEmpty->x == x && possibleEmpty->y == y)
+            return false;
+    }
+    return true;
 }
 
 int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLength)
