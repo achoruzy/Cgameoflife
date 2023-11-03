@@ -17,16 +17,16 @@ Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGri
 {
     // check for already exist and remove cell
     bool removed = false;
-    for (int i = 0; i < *cellArrayLengthPtr; i++)
-    {
-        Cell *current = cellArray + i;
-        if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
-        {
-            // TODO: remove works now as UNDO
-            (*cellArrayLengthPtr)--;
-            removed = true;
-        }
-    }
+    // for (int i = 0; i < *cellArrayLengthPtr; i++)
+    // {
+    //     Cell *current = cellArray + i;
+    //     if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
+    //     {
+    //         // TODO: remove works now as UNDO
+    //         (*cellArrayLengthPtr)--;
+    //         removed = true;
+    //     }
+    // }
     // append
     if (!removed)
     {
@@ -57,8 +57,7 @@ bool IsCellEmpty(Cell *arrayPtr, int lenght, int x, int y)
 {
     for (int i = 0; i < lenght; i++)
     {
-        Cell *possibleEmpty = &arrayPtr[i];
-        if (possibleEmpty->x == x && possibleEmpty->y == y)
+        if (arrayPtr[i].x == x && arrayPtr[i].y == y)
             return false;
     }
     return true;
@@ -77,7 +76,7 @@ int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengt
     SE -> x+1, y+1
     */
 
-    // TODO: grid end handling
+    // TODO: handle grid edge
     int count = 0;
     for (int i = 0; i < cellArrayLength; i++)
     {
@@ -94,4 +93,73 @@ int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengt
         }
     }
     return count;
+}
+
+int HandleExistingCells(Cell *cellArrayPtr, int cellArrayLength)
+{
+    Cell *survivedArrayPtr = CellArray(cellArrayLength);
+    int countSurvived = 0;
+
+    for (int i = 0; i < cellArrayLength; i++)
+    {
+        Cell *currentPtr = &cellArrayPtr[i];
+        int cellNeighbors = CellNeighborsQty(currentPtr->x, currentPtr->y, cellArrayPtr, cellArrayLength);
+        bool isCellObeyRules = TryObeyRules(currentPtr, cellNeighbors);
+
+        if (isCellObeyRules) // if obey then it stays and appends to new array
+        {
+            survivedArrayPtr[countSurvived] = *currentPtr;
+            countSurvived++;
+        }
+    }
+    free(cellArrayPtr);
+    cellArrayPtr = survivedArrayPtr;
+    return countSurvived;
+}
+
+int SpawnNewCells(Cell *spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLength)
+{
+    int countSpawned = 0;
+
+    for (int i = 0; i < cellArrayLength; i++) // check around existing only
+    {
+        // TODO: handle grid edge
+        Cell *currentPtr = &cellArrayPtr[i];
+        for (int x = currentPtr->x - 1; x <= currentPtr->x + 1; x++)
+        {
+            for (int y = currentPtr->y - 1; y <= currentPtr->y + 1; y++)
+            {
+                // don't check current -> middle one in 3x3 around grid
+                if (x == 0 && y == 0)
+                    continue;
+
+                // check empty cell if may live
+                if (IsCellEmpty(cellArrayPtr, cellArrayLength, x, y))
+                {
+                    int emptyCellNeighbors = CellNeighborsQty(x, y, cellArrayPtr, cellArrayLength);
+                    if (isToRevive(emptyCellNeighbors))
+                    {
+                        spawnedArrayPtr[countSpawned] = *currentPtr;
+                        countSpawned++;
+                    }
+                }
+            }
+        }
+    }
+    return countSpawned;
+}
+
+Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
+{
+    Cell *resultArr = CellArray(len1 + len2);
+    int i = 0;
+    for (i; i < len1; i++)
+    {
+        resultArr[i] = arr1Ptr[i];
+    }
+    for (i; i < len1 + len2; i++)
+    {
+        resultArr[i] = arr1Ptr[i - len1];
+    }
+    return resultArr;
 }

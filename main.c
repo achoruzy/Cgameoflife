@@ -67,56 +67,19 @@ int main()
 		logicCooldown += GetFrameTime();
 
 		// MAIN LOGIC
-		int updatedArrayLenght = 0;
-		Cell *updatedArrayPtr = CellArray(cellArrayLength);
-
 		if (!isPause && logicCooldown > 0.1)
 		{
 			logicCooldown = 0;
 
-			// checking existing cells
-			for (int i = 0; i < cellArrayLength; i++)
-			{
-				Cell *currentPtr = &cellArrayPtr[i];
-				int cellNeighbors = CellNeighborsQty(currentPtr->x, currentPtr->y, cellArrayPtr, cellArrayLength);
-				bool isCellObeyRules = TryObeyRules(currentPtr, cellNeighbors);
+			int survivedCount = HandleExistingCells(cellArrayPtr, cellArrayLength);
+			Cell *spawnedArrayPtr = CellArray(survivedCount);
+			int spawnedCount = SpawnNewCells(spawnedArrayPtr, cellArrayPtr, survivedCount);
 
-				if (isCellObeyRules) // if obey then it stays and appends to new array
-				{
-					updatedArrayPtr[updatedArrayLenght] = *currentPtr;
-					updatedArrayLenght++;
-				}
-			}
-
-			// getting to life new cells
-			int newArrayLenghtUpdate = updatedArrayLenght;
-			for (int i = 0; i < updatedArrayLenght; i++) // check around existing only
-			{
-				Cell *currentPtr = &updatedArrayPtr[i];
-				for (int x = currentPtr->x - 1; x <= currentPtr->x + 1; x++)
-				{
-					for (int y = currentPtr->y - 1; y <= currentPtr->y + 1; y++)
-					{
-						// don't check current -> middle one in 3x3 around grid
-						if (x == 0 && y == 0)
-							continue;
-
-						// check empty cell if may live
-						if (IsCellEmpty(cellArrayPtr, cellArrayLength, x, y))
-						{
-							int emptyCellNeighbors = CellNeighborsQty(x, y, updatedArrayPtr, updatedArrayLenght);
-							if (isToRevive(emptyCellNeighbors))
-							{
-								UpdateOne(updatedArrayPtr, updatedArrayLenght, x, y, false, 3);
-								newArrayLenghtUpdate++;
-							}
-						}
-					}
-				}
-			}
+			Cell *drawArrayPtr = ConcatenateCellArrays(cellArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
 			free(cellArrayPtr);
-			cellArrayPtr = updatedArrayPtr;
-			cellArrayLength = newArrayLenghtUpdate;
+			free(spawnedArrayPtr);
+			cellArrayPtr = drawArrayPtr;
+			cellArrayLength = survivedCount + spawnedCount;
 		}
 
 		// DRAW CANVAS

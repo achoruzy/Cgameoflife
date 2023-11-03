@@ -4,6 +4,7 @@
 #define CELL_UTILS_H_
 
 #include "cell.h"
+#include "convay_rules.h"
 
 #include <raylib.h>
 #include <stdlib.h>
@@ -22,5 +23,11 @@ bool IsCellEmpty(Cell *array, int lenght, int x, int y);
 
 // Calculates number of cell neighbors
 int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengthPtr);
+
+int HandleExistingCells(Cell *cellArrayPtr, int cellArrayLength);
+
+int SpawnNewCells(Cell *spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLength);
+
+Cell *ConcatenateCellArrays(Cell *arr1, int len1, Cell *arr2, int len2);
 
 #endif
