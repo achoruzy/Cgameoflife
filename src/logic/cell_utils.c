@@ -99,7 +99,6 @@ int HandleExistingCells(Cell *cellArrayPtr, int cellArrayLength)
 {
     Cell *survivedArrayPtr = CellArray(cellArrayLength);
     int countSurvived = 0;
-
     for (int i = 0; i < cellArrayLength; i++)
     {
         Cell *currentPtr = &cellArrayPtr[i];
@@ -112,8 +111,17 @@ int HandleExistingCells(Cell *cellArrayPtr, int cellArrayLength)
             countSurvived++;
         }
     }
-    free(cellArrayPtr);
-    cellArrayPtr = survivedArrayPtr;
+
+    if (countSurvived > 0)
+    {
+        cellArrayPtr = survivedArrayPtr;
+        cellArrayPtr = (Cell *)realloc(cellArrayPtr, countSurvived * sizeof(Cell));
+        if (cellArrayPtr == NULL)
+        {
+            puts("Error: (re)allocating memory cellArrayPtr");
+            exit(EXIT_FAILURE);
+        }
+    }
     return countSurvived;
 }
 
@@ -130,7 +138,7 @@ int SpawnNewCells(Cell *spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLength
             for (int y = currentPtr->y - 1; y <= currentPtr->y + 1; y++)
             {
                 // don't check current -> middle one in 3x3 around grid
-                if (x == 0 && y == 0)
+                if (x == currentPtr->x && y == currentPtr->y)
                     continue;
 
                 // check empty cell if may live
@@ -151,15 +159,22 @@ int SpawnNewCells(Cell *spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLength
 
 Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
 {
-    Cell *resultArr = CellArray(len1 + len2);
+    Cell *resultArrPtr = CellArray(len1 + len2);
+    if (resultArrPtr == NULL)
+    {
+        free(arr1Ptr);
+        free(arr2Ptr);
+        puts("Error: (re)allocating memory resultArrayPtr");
+        exit(EXIT_FAILURE);
+    }
     int i = 0;
     for (i; i < len1; i++)
     {
-        resultArr[i] = arr1Ptr[i];
+        resultArrPtr[i] = arr1Ptr[i];
     }
     for (i; i < len1 + len2; i++)
     {
-        resultArr[i] = arr1Ptr[i - len1];
+        resultArrPtr[i] = arr1Ptr[i - len1];
     }
-    return resultArr;
+    return resultArrPtr;
 }

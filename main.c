@@ -72,6 +72,7 @@ int main()
 			logicCooldown = 0;
 
 			int survivedCount = HandleExistingCells(cellArrayPtr, cellArrayLength);
+			printf("%i\n", survivedCount);
 			Cell *spawnedArrayPtr = CellArray(survivedCount);
 			int spawnedCount = SpawnNewCells(spawnedArrayPtr, cellArrayPtr, survivedCount);
 
@@ -90,13 +91,9 @@ int main()
 		DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);								 // TODO: Toggle grid visibility
 		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY); // TODO: Refactor to hoover function
 
-		// visualize current cells state
+		// DRAW CELLS
 		for (int i = 0; i < cellArrayLength; i++)
-		{
-			Cell current = cellArrayPtr[i];
-			if (!current.isDead)
-				DrawCell((Vector2){current.x, current.y}, spacing);
-		}
+			DrawCell((Vector2){cellArrayPtr[i].x, cellArrayPtr[i].y}, spacing);
 
 		// POSTPROCESS CANVAS
 
