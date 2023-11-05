@@ -7,8 +7,6 @@
 
 #include <stdbool.h>
 
-bool TryObeyRules(Cell *cell, int num_neighbors);
-
 // When cell is empty but has 3 living cells around, then is to revive
 bool isToRevive(int num_neighbors);
 

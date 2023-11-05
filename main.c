@@ -67,17 +67,18 @@ int main()
 		logicCooldown += GetFrameTime();
 
 		// MAIN LOGIC
-		if (!isPause && logicCooldown > 0.1)
+		if (!isPause && logicCooldown > 0.2)
 		{
 			logicCooldown = 0;
 
-			int survivedCount = HandleExistingCells(cellArrayPtr, cellArrayLength);
-			printf("%i\n", survivedCount);
+			Cell *survivedArrayPtr = CellArray(cellArrayLength);
+			int survivedCount = HandleExistingCells(&survivedArrayPtr, cellArrayPtr, cellArrayLength);
 			Cell *spawnedArrayPtr = CellArray(survivedCount);
-			int spawnedCount = SpawnNewCells(spawnedArrayPtr, cellArrayPtr, survivedCount);
+			int spawnedCount = SpawnNewCells(&spawnedArrayPtr, cellArrayPtr, cellArrayLength);
 
-			Cell *drawArrayPtr = ConcatenateCellArrays(cellArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
+			Cell *drawArrayPtr = ConcatenateCellArrays(survivedArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
 			free(cellArrayPtr);
+			free(survivedArrayPtr);
 			free(spawnedArrayPtr);
 			cellArrayPtr = drawArrayPtr;
 			cellArrayLength = survivedCount + spawnedCount;

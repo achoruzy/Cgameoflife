@@ -45,14 +45,6 @@ Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGri
     return cellArray;
 }
 
-void UpdateOne(Cell *arrayPtr, int i, int x, int y, bool isDead, int neighbors)
-{
-    arrayPtr[i].x = x;
-    arrayPtr[i].y = y;
-    arrayPtr[i].isDead = isDead;
-    arrayPtr[i].neighbours = neighbors;
-}
-
 bool IsCellEmpty(Cell *arrayPtr, int lenght, int x, int y)
 {
     for (int i = 0; i < lenght; i++)
@@ -95,65 +87,57 @@ int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengt
     return count;
 }
 
-int HandleExistingCells(Cell *cellArrayPtr, int cellArrayLength)
+int HandleExistingCells(Cell **survivedArrayPtr, Cell *cellArrayPtr, int cellArrayLength)
 {
-    Cell *survivedArrayPtr = CellArray(cellArrayLength);
     int countSurvived = 0;
     for (int i = 0; i < cellArrayLength; i++)
     {
-        Cell *currentPtr = &cellArrayPtr[i];
-        int cellNeighbors = CellNeighborsQty(currentPtr->x, currentPtr->y, cellArrayPtr, cellArrayLength);
-        bool isCellObeyRules = TryObeyRules(currentPtr, cellNeighbors);
+        Cell currentCell = cellArrayPtr[i];
+        currentCell.neighbours = CellNeighborsQty(currentCell.x, currentCell.y, cellArrayPtr, cellArrayLength);
+        bool isSurvived = isToLive(currentCell.neighbours);
 
-        if (isCellObeyRules) // if obey then it stays and appends to new array
+        // printf("x: %i, y: %i, dead: %i, neigh: %i\n", currentCell.x, currentCell.y, currentCell.isDead, currentCell.neighbours);
+
+        if (isToLive(currentCell.neighbours)) // if obey then it stays and appends to new array
         {
-            survivedArrayPtr[countSurvived] = *currentPtr;
+            currentCell.isDead = true;
+            (*survivedArrayPtr)[countSurvived] = currentCell;
             countSurvived++;
         }
     }
-
-    if (countSurvived > 0)
-    {
-        cellArrayPtr = survivedArrayPtr;
-        cellArrayPtr = (Cell *)realloc(cellArrayPtr, countSurvived * sizeof(Cell));
-        if (cellArrayPtr == NULL)
-        {
-            puts("Error: (re)allocating memory cellArrayPtr");
-            exit(EXIT_FAILURE);
-        }
-    }
+    // printf("arr len: %i count surv: %i\n", cellArrayLength, countSurvived);
+    // printf("---\n");
     return countSurvived;
 }
 
-int SpawnNewCells(Cell *spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLength)
+int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLength)
 {
     int countSpawned = 0;
 
     for (int i = 0; i < cellArrayLength; i++) // check around existing only
     {
         // TODO: handle grid edge
-        Cell *currentPtr = &cellArrayPtr[i];
-        for (int x = currentPtr->x - 1; x <= currentPtr->x + 1; x++)
+        Cell currentCell = cellArrayPtr[i];
+        for (int x = currentCell.x - 1; x <= currentCell.x + 1; x++)
         {
-            for (int y = currentPtr->y - 1; y <= currentPtr->y + 1; y++)
+            for (int y = currentCell.y - 1; y <= currentCell.y + 1; y++)
             {
-                // don't check current -> middle one in 3x3 around grid
-                if (x == currentPtr->x && y == currentPtr->y)
-                    continue;
-
-                // check empty cell if may live
-                if (IsCellEmpty(cellArrayPtr, cellArrayLength, x, y))
+                if (IsCellEmpty(cellArrayPtr, cellArrayLength, x, y) && IsCellEmpty(*spawnedArrayPtr, countSpawned, x, y))
                 {
                     int emptyCellNeighbors = CellNeighborsQty(x, y, cellArrayPtr, cellArrayLength);
                     if (isToRevive(emptyCellNeighbors))
                     {
-                        spawnedArrayPtr[countSpawned] = *currentPtr;
+                        Cell spawnedCell = {x, y, false, emptyCellNeighbors};
+                        (*spawnedArrayPtr)[countSpawned] = spawnedCell;
+                        // printf("x: %i, y: %i, dead: %i, neigh: %i\n", spawnedCell.x, spawnedCell.y, spawnedCell.isDead, spawnedCell.neighbours);
                         countSpawned++;
                     }
                 }
             }
         }
     }
+    // printf("spawned: %i\n", countSpawned);
+    printf("\n");
     return countSpawned;
 }
 
@@ -174,7 +158,7 @@ Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
     }
     for (i; i < len1 + len2; i++)
     {
-        resultArrPtr[i] = arr1Ptr[i - len1];
+        resultArrPtr[i] = arr2Ptr[i - len1];
     }
     return resultArrPtr;
 }
