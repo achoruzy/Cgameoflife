@@ -15,7 +15,7 @@
 Cell *CellArray(int size);
 
 // Updates main CellArray on user input
-Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos);
+void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos);
 
 bool IsCellEmpty(Cell *array, int lenght, int x, int y);
 

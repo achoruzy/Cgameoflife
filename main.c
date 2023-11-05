@@ -61,7 +61,7 @@ int main()
 		if (IsKeyPressed(KEY_SPACE))
 			isPause = !isPause;
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can add or remove at least one
-			cellArrayPtr = UpdateCellArray(cellArrayPtr, &cellArrayLength, mouseGridPos);
+			UpdateCellArray(&cellArrayPtr, &cellArrayLength, mouseGridPos);
 
 		// Time management
 		logicCooldown += GetFrameTime();
@@ -76,12 +76,29 @@ int main()
 			Cell *spawnedArrayPtr = CellArray(survivedCount);
 			int spawnedCount = SpawnNewCells(&spawnedArrayPtr, cellArrayPtr, cellArrayLength);
 
-			Cell *drawArrayPtr = ConcatenateCellArrays(survivedArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
-			free(cellArrayPtr);
-			free(survivedArrayPtr);
-			free(spawnedArrayPtr);
-			cellArrayPtr = drawArrayPtr;
-			cellArrayLength = survivedCount + spawnedCount;
+			if (survivedCount > 0 && spawnedCount > 0)
+			{
+				Cell *drawArrayPtr = ConcatenateCellArrays(survivedArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
+				free(cellArrayPtr);
+				free(survivedArrayPtr);
+				free(spawnedArrayPtr);
+				cellArrayPtr = drawArrayPtr;
+				cellArrayLength = survivedCount + spawnedCount;
+			}
+			else if (survivedCount > 0 && spawnedCount <= 0)
+			{
+				free(cellArrayPtr);
+				free(spawnedArrayPtr);
+				cellArrayPtr = survivedArrayPtr;
+				cellArrayLength = survivedCount;
+			}
+			else if (survivedCount <= 0 && spawnedCount > 0)
+			{
+				free(cellArrayPtr);
+				free(survivedArrayPtr);
+				cellArrayPtr = spawnedArrayPtr;
+				cellArrayLength = spawnedCount;
+			}
 		}
 
 		// DRAW CANVAS

@@ -13,20 +13,20 @@ Cell *CellArray(int size)
     return cellPtr;
 }
 
-Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos)
+void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos)
 {
     // check for already exist and remove cell
     bool removed = false;
-    // for (int i = 0; i < *cellArrayLengthPtr; i++)
-    // {
-    //     Cell *current = cellArray + i;
-    //     if (current->x == (int)mouseGridPos.x && current->y == (int)mouseGridPos.y)
-    //     {
-    //         // TODO: remove works now as UNDO
-    //         (*cellArrayLengthPtr)--;
-    //         removed = true;
-    //     }
-    // }
+    for (int i = 0; i < *cellArrayLengthPtr; i++)
+    {
+        Cell currentCell = (*cellArray)[i];
+        if (currentCell.x == (int)mouseGridPos.x && currentCell.y == (int)mouseGridPos.y)
+        {
+            // TODO: remove works now as UNDO
+            (*cellArrayLengthPtr)--;
+            removed = true;
+        }
+    }
     // append
     if (!removed)
     {
@@ -35,14 +35,13 @@ Cell *UpdateCellArray(Cell *cellArray, int *cellArrayLengthPtr, Vector2 mouseGri
 
         for (int i = 0; i < *cellArrayLengthPtr - 1; i++)
         {
-            newArray[i] = cellArray[i];
+            newArray[i] = (*cellArray)[i];
         }
         newArray[*cellArrayLengthPtr - 1] = (Cell){mouseGridPos.x, mouseGridPos.y, false, 0};
 
-        free(cellArray);
-        cellArray = newArray; // newArray not to free here as cellArray gots the address
+        free(*cellArray);
+        *cellArray = newArray; // newArray not to free here as cellArray gots the address
     }
-    return cellArray;
 }
 
 bool IsCellEmpty(Cell *arrayPtr, int lenght, int x, int y)
@@ -96,8 +95,6 @@ int HandleExistingCells(Cell **survivedArrayPtr, Cell *cellArrayPtr, int cellArr
         currentCell.neighbours = CellNeighborsQty(currentCell.x, currentCell.y, cellArrayPtr, cellArrayLength);
         bool isSurvived = isToLive(currentCell.neighbours);
 
-        // printf("x: %i, y: %i, dead: %i, neigh: %i\n", currentCell.x, currentCell.y, currentCell.isDead, currentCell.neighbours);
-
         if (isToLive(currentCell.neighbours)) // if obey then it stays and appends to new array
         {
             currentCell.isDead = true;
@@ -105,8 +102,6 @@ int HandleExistingCells(Cell **survivedArrayPtr, Cell *cellArrayPtr, int cellArr
             countSurvived++;
         }
     }
-    // printf("arr len: %i count surv: %i\n", cellArrayLength, countSurvived);
-    // printf("---\n");
     return countSurvived;
 }
 
@@ -129,15 +124,12 @@ int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLengt
                     {
                         Cell spawnedCell = {x, y, false, emptyCellNeighbors};
                         (*spawnedArrayPtr)[countSpawned] = spawnedCell;
-                        // printf("x: %i, y: %i, dead: %i, neigh: %i\n", spawnedCell.x, spawnedCell.y, spawnedCell.isDead, spawnedCell.neighbours);
                         countSpawned++;
                     }
                 }
             }
         }
     }
-    // printf("spawned: %i\n", countSpawned);
-    printf("\n");
     return countSpawned;
 }
 
@@ -151,14 +143,13 @@ Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
         puts("Error: (re)allocating memory resultArrayPtr");
         exit(EXIT_FAILURE);
     }
-    int i = 0;
-    for (i; i < len1; i++)
+    for (int i = 0; i < len1; i++)
     {
         resultArrPtr[i] = arr1Ptr[i];
     }
-    for (i; i < len1 + len2; i++)
+    for (int i = 0; i < len2; i++)
     {
-        resultArrPtr[i] = arr2Ptr[i - len1];
+        resultArrPtr[len1 + i] = arr2Ptr[i];
     }
     return resultArrPtr;
 }
