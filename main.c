@@ -18,18 +18,18 @@
 
 int main()
 {
-	int windowWidth = 800;
-	int windowHeight = 600;
+	const int screenWidth = 800;
+	const int screenHeight = 600;
 
 	Color bgColor = {21, 30, 39, 255};
 
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
-	InitWindow(windowWidth, windowHeight, "C Game of Life");
-	SetWindowMinSize(windowWidth, windowHeight);
+	InitWindow(screenWidth, screenHeight, "C Game of Life");
+	SetWindowMinSize(screenWidth, screenHeight);
 	SetTargetFPS(60);
 
 	Camera2D mainCamera = {0};
-	mainCamera.target = (Vector2){-windowWidth / 2, -windowHeight / 2}; // camera pivot, left top
+	mainCamera.target = (Vector2){-screenWidth / 2, -screenHeight / 2}; // camera pivot, left top
 	mainCamera.zoom = 1.f;
 
 	// Runtime config
@@ -37,6 +37,8 @@ int main()
 	int gridSize = 100;
 	Color gridColor = {100, 100, 100, 200};
 	float gridThickness = .2f;
+	float screenMargin = 25.f;
+	float gridHalfWidth = gridSize * spacing / 2;
 
 	// Logic
 	int cellArrayLength = 0;
@@ -54,13 +56,26 @@ int main()
 		Vector2 mouseWorldPos = GetScreenToWorld2D(mouseScreenPos, mainCamera);
 		Vector2 mouseGridPos = WorldToGrid(mouseWorldPos, spacing);
 
+		int monitor = GetCurrentMonitor();
 		if (IsKeyPressed(KEY_F1))
-			ToggleFullscreen(); // TODO: resize window with fullscreen and get back
+		{
+			if (IsWindowFullscreen())
+				SetWindowSize(screenWidth, screenHeight);
+			else
+				SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
+			ToggleFullscreen();
+		}
+
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
-			mainCamera.offset = Vector2Add(mainCamera.offset, GetMouseDelta()); // TODO: limit to grid size
+		{
+			mainCamera.offset = Vector2Clamp(
+				Vector2Add(mainCamera.offset, GetMouseDelta()),
+				(Vector2){-gridHalfWidth + (screenWidth / 2) - screenMargin, -gridHalfWidth + (screenHeight / 2) - screenMargin},
+				(Vector2){gridHalfWidth - (screenWidth / 2) + screenMargin, gridHalfWidth - (screenHeight / 2) + screenMargin}); // TODO: limit to grid size
+		}
 		if (IsKeyPressed(KEY_SPACE))
 			isPause = !isPause;
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can add or remove at least one
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can add or remove at least one at a time
 			UpdateCellArray(&cellArrayPtr, &cellArrayLength, mouseGridPos);
 
 		// Time management
@@ -111,14 +126,15 @@ int main()
 
 		// DRAW CELLS
 		for (int i = 0; i < cellArrayLength; i++)
+		{
 			DrawCell((Vector2){cellArrayPtr[i].x, cellArrayPtr[i].y}, spacing);
-
+		}
 		// POSTPROCESS CANVAS
 
 		// DRAW UI
 		{
 			Color color = isPause ? RED : GREEN;
-			Vector2 screenPos = GetScreenToWorld2D((Vector2){windowWidth - 50, windowHeight - 50}, mainCamera);
+			Vector2 screenPos = GetScreenToWorld2D((Vector2){screenWidth - 50, screenHeight - 50}, mainCamera);
 			DrawCircle(screenPos.x, screenPos.y, 10.f, color);
 		}
 

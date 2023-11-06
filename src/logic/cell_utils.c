@@ -144,12 +144,8 @@ Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < len1; i++)
-    {
         resultArrPtr[i] = arr1Ptr[i];
-    }
     for (int i = 0; i < len2; i++)
-    {
         resultArrPtr[len1 + i] = arr2Ptr[i];
-    }
     return resultArrPtr;
 }
