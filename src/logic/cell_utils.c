@@ -68,20 +68,19 @@ int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengt
     */
 
     // TODO: handle grid edge
+    int x, y;
     int count = 0;
     for (int i = 0; i < cellArrayLength; i++)
     {
-        int x = cellArray[i].x;
-        int y = cellArray[i].y;
+        x = cellArray[i].x;
+        y = cellArray[i].y;
 
         if (x == cell_x && y == cell_y)
             continue;
 
-        if (x == cell_x || x == cell_x - 1 || x == cell_x + 1)
-        {
-            if (y == cell_y || y == cell_y - 1 || y == cell_y + 1)
-                count++;
-        }
+        if ((x == cell_x || x == cell_x - 1 || x == cell_x + 1) &&
+            (y == cell_y || y == cell_y - 1 || y == cell_y + 1))
+            count++;
     }
     return count;
 }
@@ -99,6 +98,7 @@ int HandleExistingCells(Cell **survivedArrayPtr, Cell *cellArrayPtr, int cellArr
         {
             currentCell.isDead = true;
             (*survivedArrayPtr)[countSurvived] = currentCell;
+
             countSurvived++;
         }
     }

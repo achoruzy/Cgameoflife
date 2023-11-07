@@ -57,24 +57,35 @@ void main()
      }
 
      {
-          int dummy_len = 36;
-          Cell *dummy_arr = CellArray(dummy_len);
+          int side_len = 3;
+          int len = side_len * side_len;
+          Cell *dummy_arr = CellArray(len);
+          Cell *survived_dummy_arr = CellArray(len);
 
           int i = 0;
-          for (int xi = 0; xi < 6; xi++)
+          for (int xi = 0; xi < side_len; xi++)
           {
-               for (int yi = 0; yi < 6; yi++)
+               for (int yi = 0; yi < side_len; yi++)
                {
-                    dummy_arr[i].x = xi;
-                    dummy_arr[i].y = yi;
+                    dummy_arr[i] = (Cell){xi, yi, true, 8};
+                    // printf("%i, %i\n", xi, yi);
+                    // printf("%i, %i, %i, %i\n", dummy_arr[i].x, dummy_arr[i].y, dummy_arr[i].isDead, dummy_arr[i].neighbours);
                     i++;
                }
           }
-          int survivedCells = HandleExistingCells(dummy_arr, dummy_len);
-          TEST(ASSERT_EQ(survivedCells, dummy_len),
-               "logic/cell_utils.c: HandleExistingCells");
+          int survivedCells = HandleExistingCells(&survived_dummy_arr, dummy_arr, len);
+
+          // for (int k = 0; k < survivedCells; k++)
+          // {
+          // printf("%i, %i, %i, %i\n", survived_dummy_arr[k].x, survived_dummy_arr[k].y, survived_dummy_arr[k].isDead, survived_dummy_arr[k].neighbours);
+          // }
+          TEST(ASSERT_EQ(survivedCells, 4),
+               "logic/cell_utils.c: HandleExistingCells has proper length");
+          TEST(ASSERT_EQ(dummy_arr[0].x, survived_dummy_arr[0].x),
+               "logic/cell_utils.c: HandleExistingCells updates array properly");
 
           free(dummy_arr);
+          free(survived_dummy_arr);
      }
 
      TEST_END();
