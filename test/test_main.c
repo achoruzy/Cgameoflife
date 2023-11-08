@@ -83,6 +83,8 @@ void main()
                "logic/cell_utils.c: HandleExistingCells has proper length");
           TEST(ASSERT_EQ(dummy_arr[0].x, survived_dummy_arr[0].x),
                "logic/cell_utils.c: HandleExistingCells updates array properly");
+          TEST(ASSERT_EQ(dummy_arr[len - 1].y, survived_dummy_arr[survivedCells - 1].y),
+               "logic/cell_utils.c: HandleExistingCells updates array properly");
 
           free(dummy_arr);
           free(survived_dummy_arr);
