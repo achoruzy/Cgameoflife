@@ -67,18 +67,16 @@ int main()
 				SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
 			ToggleFullscreen();
 		}
-
 		if (IsKeyPressed(KEY_F2))
 		{
 			isGrid = !isGrid;
 		}
-
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 		{
 			mainCamera.offset = Vector2Clamp(
 				Vector2Add(mainCamera.offset, GetMouseDelta()),
 				(Vector2){-gridHalfWidth + (screenWidth / 2) - screenMargin, -gridHalfWidth + (screenHeight / 2) - screenMargin},
-				(Vector2){gridHalfWidth - (screenWidth / 2) + screenMargin, gridHalfWidth - (screenHeight / 2) + screenMargin}); // TODO: limit to grid size
+				(Vector2){gridHalfWidth - (screenWidth / 2) + screenMargin, gridHalfWidth - (screenHeight / 2) + screenMargin});
 		}
 		if (IsKeyPressed(KEY_SPACE))
 			isPause = !isPause;
@@ -98,10 +96,10 @@ int main()
 			Cell *spawnedArrayPtr = CellArray(survivedCount);
 			int spawnedCount = SpawnNewCells(&spawnedArrayPtr, cellArrayPtr, cellArrayLength);
 
+			free(cellArrayPtr);
 			if (survivedCount > 0 && spawnedCount > 0)
 			{
 				Cell *drawArrayPtr = ConcatenateCellArrays(survivedArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
-				free(cellArrayPtr);
 				free(survivedArrayPtr);
 				free(spawnedArrayPtr);
 				cellArrayPtr = drawArrayPtr;
@@ -109,14 +107,12 @@ int main()
 			}
 			else if (survivedCount > 0 && spawnedCount <= 0)
 			{
-				free(cellArrayPtr);
 				free(spawnedArrayPtr);
 				cellArrayPtr = survivedArrayPtr;
 				cellArrayLength = survivedCount;
 			}
 			else if (survivedCount <= 0 && spawnedCount > 0)
 			{
-				free(cellArrayPtr);
 				free(survivedArrayPtr);
 				cellArrayPtr = spawnedArrayPtr;
 				cellArrayLength = spawnedCount;
@@ -132,7 +128,7 @@ int main()
 			DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);
 		HooverGridCell(mouseGridPos.x, mouseGridPos.y, spacing, LIGHTGRAY);
 
-		// DRAW CELLS
+		// DRAW EXISTING CELLS
 		for (int i = 0; i < cellArrayLength; i++)
 		{
 			DrawCell(cellArrayPtr[i].x, cellArrayPtr[i].y, spacing);
