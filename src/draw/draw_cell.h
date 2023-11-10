@@ -7,6 +7,6 @@
 #include <rlgl.h>
 
 // Draws one cell on the screen
-void DrawCell(Vector2 gridPos, float spacing);
+void DrawCell(int x, int y, float spacing);
 
 #endif

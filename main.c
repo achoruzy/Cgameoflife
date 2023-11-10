@@ -15,6 +15,7 @@
 #include "./src/logic/grid.h"
 #include "./src/draw/draw_grid.h"
 #include "./src/draw/draw_cell.h"
+#include "./src/input/input_handlers.h"
 
 int main()
 {
@@ -46,6 +47,7 @@ int main()
 
 	// UI flags
 	bool isPause = true;
+	bool isGrid = true;
 
 	// Time
 	double logicCooldown = 0;
@@ -64,6 +66,11 @@ int main()
 			else
 				SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
 			ToggleFullscreen();
+		}
+
+		if (IsKeyPressed(KEY_F2))
+		{
+			isGrid = !isGrid;
 		}
 
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
@@ -121,13 +128,14 @@ int main()
 		BeginMode2D(mainCamera);
 		ClearBackground(bgColor);
 
-		DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);								 // TODO: Toggle grid visibility
-		DrawRectangleLines(mouseGridPos.x * spacing, mouseGridPos.y * spacing, spacing, spacing, LIGHTGRAY); // TODO: Refactor to hoover function
+		if (isGrid)
+			DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);
+		HooverGridCell(mouseGridPos.x, mouseGridPos.y, spacing, LIGHTGRAY);
 
 		// DRAW CELLS
 		for (int i = 0; i < cellArrayLength; i++)
 		{
-			DrawCell((Vector2){cellArrayPtr[i].x, cellArrayPtr[i].y}, spacing);
+			DrawCell(cellArrayPtr[i].x, cellArrayPtr[i].y, spacing);
 		}
 		// POSTPROCESS CANVAS
 

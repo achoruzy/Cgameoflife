@@ -1,22 +1,17 @@
 // Copyright (C) Arkadiusz Choruży
 
-
 #include "draw_cell.h"
 
-
-void DrawCell(Vector2 gridPos, float spacing)
+void DrawCell(int x, int y, float spacing)
 {
-    int row = gridPos.x;
-	int column = gridPos.y;
 	float dilatation = 0.05f;
-	float cellSize = spacing-2*dilatation;
+	float cellSize = spacing - 2 * dilatation;
 
 	Rectangle cell = {
-		row * spacing + dilatation,
-		column * spacing + dilatation,
+		x * spacing + dilatation,
+		y * spacing + dilatation,
 		cellSize,
-		cellSize
-		};
-	
+		cellSize};
+
 	DrawRectangleRounded(cell, 0.3, 2, WHITE);
 }
