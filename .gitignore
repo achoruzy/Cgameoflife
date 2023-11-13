@@ -5,6 +5,8 @@ test.exe
 /build
 */build
 .vscode/
+/cmake-build-debug
+/test/bin
 
 # Prerequisites
 *.d

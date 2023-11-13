@@ -97,26 +97,26 @@ int main()
 			int spawnedCount = SpawnNewCells(&spawnedArrayPtr, cellArrayPtr, cellArrayLength);
 
 			free(cellArrayPtr);
-			if (survivedCount > 0 && spawnedCount > 0)
-			{
+			// if (survivedCount > 0 && spawnedCount > 0)
+			// {
 				Cell *drawArrayPtr = ConcatenateCellArrays(survivedArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
 				free(survivedArrayPtr);
 				free(spawnedArrayPtr);
 				cellArrayPtr = drawArrayPtr;
 				cellArrayLength = survivedCount + spawnedCount;
-			}
-			else if (survivedCount > 0 && spawnedCount <= 0)
-			{
-				free(spawnedArrayPtr);
-				cellArrayPtr = survivedArrayPtr;
-				cellArrayLength = survivedCount;
-			}
-			else if (survivedCount <= 0 && spawnedCount > 0)
-			{
-				free(survivedArrayPtr);
-				cellArrayPtr = spawnedArrayPtr;
-				cellArrayLength = spawnedCount;
-			}
+			// }
+			// else if (survivedCount > 0 && spawnedCount <= 0)
+			// {
+			// 	free(spawnedArrayPtr);
+			// 	cellArrayPtr = survivedArrayPtr;
+			// 	cellArrayLength = survivedCount;
+			// }
+			// else if (survivedCount <= 0 && spawnedCount > 0)
+			// {
+			// 	free(survivedArrayPtr);
+			// 	cellArrayPtr = spawnedArrayPtr;
+			// 	cellArrayLength = spawnedCount;
+			// }
 		}
 
 		// DRAW CANVAS
