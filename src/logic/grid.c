@@ -2,9 +2,9 @@
 
 #include "grid.h"
 
-Vector2 WorldToGrid(Vector2 worldPos, float gridSpacing) // TODO: Refactor to other place
+Vector2 WorldToGrid(const Vector2 worldPos, const float gridSpacing)
 {
-    float x = round(worldPos.x / gridSpacing);
-    float y = round(worldPos.y / gridSpacing);
+    const float x = round(worldPos.x / gridSpacing);
+    const float y = round(worldPos.y / gridSpacing);
     return (Vector2){x, y};
 }

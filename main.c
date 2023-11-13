@@ -22,7 +22,7 @@ int main()
 	const int screenWidth = 800;
 	const int screenHeight = 600;
 
-	Color bgColor = {21, 30, 39, 255};
+	const Color bgColor = {21, 30, 39, 255};
 
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
 	InitWindow(screenWidth, screenHeight, "C Game of Life");
@@ -97,26 +97,26 @@ int main()
 			int spawnedCount = SpawnNewCells(&spawnedArrayPtr, cellArrayPtr, cellArrayLength);
 
 			free(cellArrayPtr);
-			if (survivedCount > 0 && spawnedCount > 0)
-			{
-				Cell *drawArrayPtr = ConcatenateCellArrays(survivedArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
-				free(survivedArrayPtr);
-				free(spawnedArrayPtr);
-				cellArrayPtr = drawArrayPtr;
-				cellArrayLength = survivedCount + spawnedCount;
-			}
-			else if (survivedCount > 0 && spawnedCount <= 0)
-			{
-				free(spawnedArrayPtr);
-				cellArrayPtr = survivedArrayPtr;
-				cellArrayLength = survivedCount;
-			}
-			else if (survivedCount <= 0 && spawnedCount > 0)
-			{
-				free(survivedArrayPtr);
-				cellArrayPtr = spawnedArrayPtr;
-				cellArrayLength = spawnedCount;
-			}
+			// if (survivedCount > 0 && spawnedCount > 0)
+			// {
+			Cell *drawArrayPtr = ConcatenateCellArrays(survivedArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
+			free(survivedArrayPtr);
+			free(spawnedArrayPtr);
+			cellArrayPtr = drawArrayPtr;
+			cellArrayLength = survivedCount + spawnedCount;
+			// }
+			// else if (survivedCount > 0 && spawnedCount <= 0)
+			// {
+			// 	free(spawnedArrayPtr);
+			// 	cellArrayPtr = survivedArrayPtr;
+			// 	cellArrayLength = survivedCount;
+			// }
+			// else if (survivedCount <= 0 && spawnedCount > 0)
+			// {
+			// 	free(survivedArrayPtr);
+			// 	cellArrayPtr = spawnedArrayPtr;
+			// 	cellArrayLength = spawnedCount;
+			// }
 		}
 
 		// DRAW CANVAS

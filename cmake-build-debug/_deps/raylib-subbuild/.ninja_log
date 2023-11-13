@@ -1,0 +1,21 @@
+# ninja log v5
+0	95	7216026193803948	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-mkdir	2241096abd614ffd
+0	95	7216026193803948	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-mkdir	2241096abd614ffd
+96	9863	7216026291495833	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-download	2efce5457379015e
+96	9863	7216026291495833	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-download	2efce5457379015e
+9864	9954	7216026292434724	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-update	e35e8e225beb055a
+9864	9954	7216026292434724	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-update	e35e8e225beb055a
+9954	10057	7216026293476646	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-patch	ac2c28d16fc5d180
+9954	10057	7216026293476646	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-patch	ac2c28d16fc5d180
+10057	10160	7216026294466329	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-configure	e23906f209540727
+10057	10160	7216026294466329	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-configure	e23906f209540727
+10160	10263	7216026295507387	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-build	48022cb5af961d5b
+10160	10263	7216026295507387	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-build	48022cb5af961d5b
+10264	10350	7216026296375653	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-install	f8adfae0faa647c2
+10264	10350	7216026296375653	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-install	f8adfae0faa647c2
+10351	10446	7216026297328486	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-test	10ec3a94a784c943
+10351	10446	7216026297328486	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-test	10ec3a94a784c943
+10446	10572	7216026298580202	CMakeFiles/raylib-populate-complete	5fec6b821a2f8096
+10446	10572	7216026298580202	raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-done	5fec6b821a2f8096
+10446	10572	7216026298580202	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/CMakeFiles/raylib-populate-complete	5fec6b821a2f8096
+10446	10572	7216026298580202	C:/Users/achor/Desktop/projects/Cgameoflife/cmake-build-debug/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-done	5fec6b821a2f8096

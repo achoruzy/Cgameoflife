@@ -17,14 +17,14 @@ Cell *CellArray(int size);
 // Updates main CellArray on user input
 void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos);
 
-bool IsCellEmpty(Cell *array, int lenght, int x, int y);
+bool IsCellEmpty(const Cell *array, int lenght, int x, int y);
 
 // Calculates number of cell neighbors
-int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengthPtr);
+int CellNeighborsQty(int cell_x, int cell_y, const Cell *cellArray, int cellArrayLength);
 
-int HandleExistingCells(Cell **survivedArrayPtr, Cell *cellArrayPtr, int cellArrayLength);
+int HandleExistingCells(Cell **survivedArrayPtr, const Cell *cellArrayPtr, int cellArrayLength);
 
-int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLength);
+int SpawnNewCells(Cell **spawnedArrayPtr, const Cell *cellArrayPtr, int cellArrayLength);
 
 Cell *ConcatenateCellArrays(Cell *arr1, int len1, Cell *arr2, int len2);
 
