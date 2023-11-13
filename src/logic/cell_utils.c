@@ -2,9 +2,9 @@
 
 #include "cell_utils.h"
 
-Cell *CellArray(const int size)
+Cell *CellArray(int size)
 {
-    Cell *cellPtr = calloc(size, sizeof(Cell));
+    Cell *cellPtr = (Cell *)calloc(size, sizeof(Cell));
     if (cellPtr == NULL)
     {
         printf("Error: Cell pointers occured NULL");
@@ -13,7 +13,7 @@ Cell *CellArray(const int size)
     return cellPtr;
 }
 
-void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, const Vector2 mouseGridPos)
+void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos)
 {
     // check for already exist and remove cell
     bool removed = false;
@@ -44,7 +44,7 @@ void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, const Vector2 mo
     }
 }
 
-bool IsCellEmpty(const Cell *arrayPtr, const int lenght, const int x, const int y)
+bool IsCellEmpty(Cell *arrayPtr, int lenght, int x, int y)
 {
     for (int i = 0; i < lenght; i++)
     {
@@ -54,7 +54,7 @@ bool IsCellEmpty(const Cell *arrayPtr, const int lenght, const int x, const int 
     return true;
 }
 
-int CellNeighborsQty(const int cell_x, const int cell_y, const Cell *cellArray, const int cellArrayLength)
+int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLength)
 {
 
     /* cases
@@ -69,11 +69,12 @@ int CellNeighborsQty(const int cell_x, const int cell_y, const Cell *cellArray, 
     */
 
     // TODO: handle grid edge
+    int x, y;
     int count = 0;
     for (int i = 0; i < cellArrayLength; i++)
     {
-        int x = cellArray[i].x;
-        int y = cellArray[i].y;
+        x = cellArray[i].x;
+        y = cellArray[i].y;
 
         if (x == cell_x && y == cell_y)
             continue;
@@ -85,7 +86,7 @@ int CellNeighborsQty(const int cell_x, const int cell_y, const Cell *cellArray, 
     return count;
 }
 
-int HandleExistingCells(Cell **survivedArrayPtr, const Cell *cellArrayPtr, const int cellArrayLength)
+int HandleExistingCells(Cell **survivedArrayPtr, Cell *cellArrayPtr, int cellArrayLength)
 {
     int countSurvived = 0;
     for (int i = 0; i < cellArrayLength; i++)
@@ -93,6 +94,7 @@ int HandleExistingCells(Cell **survivedArrayPtr, const Cell *cellArrayPtr, const
         Cell currentCell = cellArrayPtr[i];
         ValidateCellPos(currentCell.x, currentCell.y);
         currentCell.neighbours = CellNeighborsQty(currentCell.x, currentCell.y, cellArrayPtr, cellArrayLength);
+        bool isSurvived = isToLive(currentCell.neighbours);
 
         if (isToLive(currentCell.neighbours)) // if obey then it stays and appends to new array
         {
@@ -105,7 +107,7 @@ int HandleExistingCells(Cell **survivedArrayPtr, const Cell *cellArrayPtr, const
     return countSurvived;
 }
 
-int SpawnNewCells(Cell **spawnedArrayPtr, const Cell *cellArrayPtr, const int cellArrayLength)
+int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLength)
 {
     int countSpawned = 0;
 
@@ -137,6 +139,13 @@ int SpawnNewCells(Cell **spawnedArrayPtr, const Cell *cellArrayPtr, const int ce
 Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
 {
     Cell *resultArrPtr = CellArray(len1 + len2);
+    if (resultArrPtr == NULL)
+    {
+        free(arr1Ptr);
+        free(arr2Ptr);
+        puts("Error: (re)allocating memory resultArrayPtr");
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < len1; i++)
         resultArrPtr[i] = arr1Ptr[i];
     for (int i = 0; i < len2; i++)
@@ -146,8 +155,8 @@ Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
 
 void ValidateCellPos(int x, int y)
 {
-    const int min = -50;
-    const int max = 50;
+    int min = -50;
+    int max = 50;
     if (x < min || x > max || y < min || y > max)
     {
         printf("Error: Cell has coordinates out of grid: %i, %i\n", x, y);
@@ -161,8 +170,8 @@ void SurroundedCellsPositions(Vector2 **surroundedPtr, Cell cell, int gridSize)
     // 3x4
     // 567
 
-    const int min = 0;
-    const int max = gridSize - 1;
+    int min = 0;
+    int max = gridSize - 1;
     *surroundedPtr = (Vector2 *)malloc(8 * sizeof(Vector2));
 
     if (cell.x < min || cell.x > max || cell.y < min || cell.y > max)
@@ -180,8 +189,11 @@ void SurroundedCellsPositions(Vector2 **surroundedPtr, Cell cell, int gridSize)
 
             if (x < min || x > max || y < min || y > max)
                 continue;
+            int newX = x;
+            int newY = y;
 
-            (*surroundedPtr)[i] = (Vector2){x, y};
+            (*surroundedPtr)[i].x = newX;
+            (*surroundedPtr)[i].y = newY;
             i++;
         }
     }
