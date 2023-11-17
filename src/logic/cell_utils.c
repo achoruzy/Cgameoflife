@@ -4,7 +4,7 @@
 
 Cell *CellArray(int size)
 {
-    Cell *cellPtr = (Cell *)calloc(size, sizeof(Cell));
+    Cell *cellPtr = calloc(size, sizeof(Cell));
     if (cellPtr == NULL)
     {
         printf("Error: Cell pointers occured NULL");
@@ -139,13 +139,6 @@ int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLengt
 Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
 {
     Cell *resultArrPtr = CellArray(len1 + len2);
-    if (resultArrPtr == NULL)
-    {
-        free(arr1Ptr);
-        free(arr2Ptr);
-        puts("Error: (re)allocating memory resultArrayPtr");
-        exit(EXIT_FAILURE);
-    }
     for (int i = 0; i < len1; i++)
         resultArrPtr[i] = arr1Ptr[i];
     for (int i = 0; i < len2; i++)
@@ -192,8 +185,7 @@ void SurroundedCellsPositions(Vector2 **surroundedPtr, Cell cell, int gridSize)
             int newX = x;
             int newY = y;
 
-            (*surroundedPtr)[i].x = newX;
-            (*surroundedPtr)[i].y = newY;
+            (*surroundedPtr)[i] = (Vector2){x, y};
             i++;
         }
     }
