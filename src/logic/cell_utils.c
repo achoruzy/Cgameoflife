@@ -54,9 +54,8 @@ bool IsCellEmpty(Cell *arrayPtr, int lenght, int x, int y)
     return true;
 }
 
-int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLength)
+int CellNeighborsQty(int x, int y, Cell *cellArray, int cellArrayLength)
 {
-
     /* cases
     N -> x, y-1
     S -> x, y+1
@@ -67,20 +66,28 @@ int CellNeighborsQty(int cell_x, int cell_y, Cell *cellArray, int cellArrayLengt
     SW -> x-1, y+1
     SE -> x+1, y+1
     */
+    int min = -50;
+    int max = 49;
+    int current_x, current_y;
+    int x_left, x_right, y_top, y_bottom;
 
-    // TODO: handle grid edge
-    int x, y;
+    x_left = x == min ? max : x - 1;
+    x_right = x == max ? min : x + 1;
+    y_bottom = y == min ? max : y - 1;
+    y_top = y == max ? min : y + 1;
+
     int count = 0;
     for (int i = 0; i < cellArrayLength; i++)
     {
-        x = cellArray[i].x;
-        y = cellArray[i].y;
+        current_x = cellArray[i].x;
+        current_y = cellArray[i].y;
 
-        if (x == cell_x && y == cell_y)
+        if (current_x == x && current_y == y)
             continue;
 
-        if ((x == cell_x || x == cell_x - 1 || x == cell_x + 1) &&
-            (y == cell_y || y == cell_y - 1 || y == cell_y + 1))
+        if ((current_x == x_left || current_x == x || current_x == x_right) &&
+            (current_y == y_top || current_y == y || current_y == y_bottom))
+
             count++;
     }
     return count;
@@ -111,15 +118,32 @@ int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLengt
 {
     int countSpawned = 0;
 
+    int min = -50;
+    int max = 49;
+    int current_x, current_y;
+    int x_left, x_right, y_top, y_bottom;
+
     for (int i = 0; i < cellArrayLength; i++) // check around existing only
     {
-        // TODO: handle grid edge
         Cell currentCell = cellArrayPtr[i];
-        ValidateCellPos(currentCell.x, currentCell.y);
-        for (int x = currentCell.x - 1; x <= currentCell.x + 1; x++)
+        current_x = currentCell.x;
+        current_y = currentCell.y;
+        ValidateCellPos(current_x, current_y);
+
+        x_left = current_x == min ? max : current_x - 1;
+        x_right = current_x == max ? min : current_x + 1;
+        y_bottom = current_y == min ? max : current_y - 1;
+        y_top = current_y == max ? min : current_y + 1;
+
+        int x_arr[] = {x_left, current_x, x_right};
+        int y_arr[] = {y_top, current_y, y_bottom};
+
+        for (int m = 0; m < 3; m++)
         {
-            for (int y = currentCell.y - 1; y <= currentCell.y + 1; y++)
+            int x = x_arr[m];
+            for (int n = 0; n < 3; n++)
             {
+                int y = y_arr[n];
                 if (IsCellEmpty(cellArrayPtr, cellArrayLength, x, y) && IsCellEmpty(*spawnedArrayPtr, countSpawned, x, y))
                 {
                     int emptyCellNeighbors = CellNeighborsQty(x, y, cellArrayPtr, cellArrayLength);
@@ -146,73 +170,13 @@ Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
     return resultArrPtr;
 }
 
-void ValidateCellPos(int x, int y)
+static void ValidateCellPos(int x, int y)
 {
     int min = -50;
-    int max = 50;
+    int max = 49;
     if (x < min || x > max || y < min || y > max)
     {
         printf("Error: Cell has coordinates out of grid: %i, %i\n", x, y);
         exit(EXIT_FAILURE);
-    }
-}
-
-void SurroundedCellsPositions(Vector2 **surroundedPtr, Cell cell, int gridSize)
-{
-    // O12
-    // 3x4
-    // 567
-
-    int min = 0;
-    int max = gridSize - 1;
-    *surroundedPtr = (Vector2 *)malloc(8 * sizeof(Vector2));
-
-    if (cell.x < min || cell.x > max || cell.y < min || cell.y > max)
-    {
-        printf("Error: Cell has coordinates out of grid: %i, %i\n", cell.x, cell.y);
-        exit(EXIT_FAILURE);
-    }
-    int i = 0;
-    for (int x = 0; x < 9; x++)
-    {
-        for (int y = 0; y < 9; y++)
-        {
-            if (x == cell.x && y == cell.y)
-                continue;
-
-            if (x < min || x > max || y < min || y > max)
-                continue;
-            int newX = x;
-            int newY = y;
-
-            (*surroundedPtr)[i] = (Vector2){x, y};
-            i++;
-        }
-    }
-
-    if (cell.x == 0)
-    {
-        (*surroundedPtr)[0].x = max;
-        (*surroundedPtr)[3].x = max;
-        (*surroundedPtr)[5].x = max;
-    }
-    else if (cell.x == max)
-    {
-        (*surroundedPtr)[2].x = min;
-        (*surroundedPtr)[4].x = min;
-        (*surroundedPtr)[7].x = min;
-    }
-
-    if (cell.y == 0)
-    {
-        (*surroundedPtr)[0].y = max;
-        (*surroundedPtr)[1].y = max;
-        (*surroundedPtr)[2].y = max;
-    }
-    else if (cell.y == max)
-    {
-        (*surroundedPtr)[5].y = min;
-        (*surroundedPtr)[6].y = min;
-        (*surroundedPtr)[7].y = min;
     }
 }

@@ -28,8 +28,6 @@ int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLengt
 
 Cell *ConcatenateCellArrays(Cell *arr1, int len1, Cell *arr2, int len2);
 
-void ValidateCellPos(int x, int y);
-
-void SurroundedCellsPositions(Vector2 **surrounded, Cell cell, int gridSize);
+static void ValidateCellPos(int x, int y);
 
 #endif
