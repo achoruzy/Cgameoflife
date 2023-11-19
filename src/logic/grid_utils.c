@@ -1,8 +1,8 @@
 // Copyright (C) Arkadiusz Choruży
 
-#include "grid.h"
+#include "grid_utils.h"
 
-Vector2 WorldToGrid(Vector2 worldPos, float gridSpacing) // TODO: Refactor to other place
+Vector2 WorldToGrid(Vector2 worldPos, float gridSpacing)
 {
     float x = round(worldPos.x / gridSpacing);
     float y = round(worldPos.y / gridSpacing);

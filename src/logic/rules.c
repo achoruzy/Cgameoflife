@@ -1,6 +1,6 @@
 // Copyright (C) Arkadiusz Choruży
 
-#include "convay_rules.h"
+#include "rules.h"
 
 bool isToRevive(int num_neighbors) { return num_neighbors == 3; }
 

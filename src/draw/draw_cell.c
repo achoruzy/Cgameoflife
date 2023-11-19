@@ -2,7 +2,7 @@
 
 #include "draw_cell.h"
 
-void DrawCell(int x, int y, float spacing)
+void DrawCell(int x, int y, float spacing, Color color)
 {
 	float dilatation = 0.05f;
 	float cellSize = spacing - 2 * dilatation;
@@ -13,5 +13,5 @@ void DrawCell(int x, int y, float spacing)
 		cellSize,
 		cellSize};
 
-	DrawRectangleRounded(cell, 0.3, 2, WHITE);
+	DrawRectangleRounded(cell, 0.3, 2, color);
 }

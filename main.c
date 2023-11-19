@@ -11,8 +11,8 @@
 
 #include "./src/logic/cell.h"
 #include "./src/logic/cell_utils.h"
-#include "./src/logic/convay_rules.h"
-#include "./src/logic/grid.h"
+#include "./src/logic/rules.h"
+#include "./src/logic/grid_utils.h"
 #include "./src/draw/draw_grid.h"
 #include "./src/draw/draw_cell.h"
 #include "./src/input/input_handlers.h"
@@ -131,7 +131,7 @@ int main()
 		// DRAW EXISTING CELLS
 		for (int i = 0; i < cellArrayLength; i++)
 		{
-			DrawCell(cellArrayPtr[i].x, cellArrayPtr[i].y, spacing);
+			DrawCell(cellArrayPtr[i].x, cellArrayPtr[i].y, spacing, WHITE);
 		}
 		// POSTPROCESS CANVAS
 

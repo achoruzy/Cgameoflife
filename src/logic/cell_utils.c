@@ -56,16 +56,6 @@ bool IsCellEmpty(Cell *arrayPtr, int lenght, int x, int y)
 
 int CellNeighborsQty(int x, int y, Cell *cellArray, int cellArrayLength)
 {
-    /* cases
-    N -> x, y-1
-    S -> x, y+1
-    W -> x-1, y
-    E -> x+1, y
-    NW -> x-1, y-1
-    NE -> x+1, y-1
-    SW -> x-1, y+1
-    SE -> x+1, y+1
-    */
     int min = -50;
     int max = 49;
     int current_x, current_y;
