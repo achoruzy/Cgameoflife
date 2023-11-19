@@ -17,6 +17,7 @@
 #include "./src/draw/draw_grid.h"
 #include "./src/draw/draw_cell.h"
 #include "./src/input/input_handlers.h"
+#include "./src/input/mouse.h"
 
 int main()
 {
@@ -55,9 +56,10 @@ int main()
 
 	while (!WindowShouldClose())
 	{
-		Vector2 mouseScreenPos = GetMousePosition();
-		Vector2 mouseWorldPos = GetScreenToWorld2D(mouseScreenPos, mainCamera);
-		Vector2 mouseGridPos = WorldToGrid(mouseWorldPos, spacing);
+		// Vector2 mouseScreenPos = GetMousePosition();
+		// Vector2 mouseWorldPos = GetScreenToWorld2D(mouseScreenPos, mainCamera);
+		// Vector2 mouseGridPos = WorldToGrid(mouseWorldPos, spacing);
+		UpdateMouseInfo(mainCamera, spacing);
 
 		int monitor = GetCurrentMonitor();
 		if (IsKeyPressed(KEY_F1))
@@ -82,7 +84,7 @@ int main()
 		if (IsKeyPressed(KEY_SPACE))
 			isPause = !isPause;
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can add or remove at least one at a time
-			UpdateCellArray(&cellArrayPtr, &cellArrayLength, mouseGridPos);
+			UpdateCellArray(&cellArrayPtr, &cellArrayLength, mouseInfo.GridPos);
 
 		// Time management
 		logicCooldown += GetFrameTime();
@@ -101,7 +103,7 @@ int main()
 
 		if (isGrid)
 			DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);
-		HooverGridCell(mouseGridPos.x, mouseGridPos.y, spacing, LIGHTGRAY);
+		HooverGridCell(mouseInfo.GridPos.x, mouseInfo.GridPos.y, spacing, LIGHTGRAY);
 
 		// DRAW EXISTING CELLS
 		for (int i = 0; i < cellArrayLength; i++)
