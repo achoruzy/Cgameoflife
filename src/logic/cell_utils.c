@@ -15,7 +15,7 @@ Cell *CellArray(int size)
 
 void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos)
 {
-    // check for already exist and remove cell
+    // check for already exist and remove cell if exists
     bool removed = false;
     for (int i = 0; i < *cellArrayLengthPtr; i++)
     {
@@ -27,7 +27,7 @@ void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 mouseGri
             removed = true;
         }
     }
-    // append
+    // append new cell
     if (!removed)
     {
         (*cellArrayLengthPtr)++;
@@ -40,7 +40,7 @@ void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 mouseGri
         newArray[*cellArrayLengthPtr - 1] = (Cell){(int)mouseGridPos.x, (int)mouseGridPos.y, false, 0};
 
         free(*cellArray);
-        *cellArray = newArray; // newArray not to free here as cellArray gots the address
+        *cellArray = newArray;
     }
 }
 

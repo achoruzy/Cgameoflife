@@ -9,6 +9,7 @@
 #include <raymath.h>
 #include <rlgl.h>
 
+#include "./src/logic/automata.h"
 #include "./src/logic/cell.h"
 #include "./src/logic/cell_utils.h"
 #include "./src/logic/rules.h"
@@ -90,33 +91,7 @@ int main()
 		if (!isPause && logicCooldown > 0.2)
 		{
 			logicCooldown = 0;
-
-			Cell *survivedArrayPtr = CellArray(cellArrayLength);
-			int survivedCount = HandleExistingCells(&survivedArrayPtr, cellArrayPtr, cellArrayLength);
-			Cell *spawnedArrayPtr = CellArray(survivedCount * 8); // HERE!!!!
-			int spawnedCount = SpawnNewCells(&spawnedArrayPtr, cellArrayPtr, cellArrayLength);
-
-			free(cellArrayPtr);
-			if (survivedCount > 0 && spawnedCount > 0)
-			{
-				Cell *drawArrayPtr = ConcatenateCellArrays(survivedArrayPtr, survivedCount, spawnedArrayPtr, spawnedCount);
-				free(survivedArrayPtr);
-				free(spawnedArrayPtr);
-				cellArrayPtr = drawArrayPtr;
-				cellArrayLength = survivedCount + spawnedCount;
-			}
-			else if (survivedCount > 0 && spawnedCount <= 0)
-			{
-				free(spawnedArrayPtr);
-				cellArrayPtr = survivedArrayPtr;
-				cellArrayLength = survivedCount;
-			}
-			else if (survivedCount <= 0 && spawnedCount > 0)
-			{
-				free(survivedArrayPtr);
-				cellArrayPtr = spawnedArrayPtr;
-				cellArrayLength = spawnedCount;
-			}
+			RunAutomata(&cellArrayPtr, &cellArrayLength);
 		}
 
 		// DRAW CANVAS
