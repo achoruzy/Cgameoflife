@@ -6,13 +6,14 @@
 #include <raylib.h>
 #include "../logic/grid_utils.h"
 
-typedef struct {
-    Vector2 ScreenPos;
+typedef struct
+{
+	Vector2 ScreenPos;
 	Vector2 WorldPos;
 	Vector2 GridPos;
 } MouseInfo;
 
-extern MouseInfo mouseInfo;
 void UpdateMouseInfo(Camera2D mainCamera, float spacing);
+MouseInfo GetMouseInfo();
 
 #endif
