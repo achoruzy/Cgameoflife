@@ -16,4 +16,8 @@ typedef struct
     bool isActive;
 } Grid;
 
+void InitializeGrid();
+Grid GetGrid();
+void SetGridActive(bool state);
+
 #endif

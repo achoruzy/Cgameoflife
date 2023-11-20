@@ -13,6 +13,7 @@
 #include "./src/logic/cell.h"
 #include "./src/logic/cell_utils.h"
 #include "./src/logic/rules.h"
+#include "./src/logic/grid.h"
 #include "./src/logic/grid_utils.h"
 #include "./src/draw/draw_grid.h"
 #include "./src/draw/draw_cell.h"
@@ -36,12 +37,11 @@ int main()
 	mainCamera.zoom = 1.f;
 
 	// Runtime config
-	float spacing = 10;
-	int gridSize = 100;
-	Color gridColor = {100, 100, 100, 200};
-	float gridThickness = .2f;
+	InitializeGrid();
+	Grid grid = GetGrid();
+
 	float screenMargin = 25.f;
-	float gridHalfWidth = gridSize * spacing / 2;
+	float gridHalfWidth = grid.size * grid.spacing / 2;
 
 	// Logic
 	int cellArrayLength = 0;
@@ -49,14 +49,13 @@ int main()
 
 	// UI flags
 	bool isPause = true;
-	bool isGrid = true;
 
 	// Time
 	double logicCooldown = 0;
 
 	while (!WindowShouldClose())
 	{
-		UpdateMouseInfo(mainCamera, spacing);
+		UpdateMouseInfo(mainCamera, grid.spacing);
 
 		int monitor = GetCurrentMonitor();
 		if (IsKeyPressed(KEY_F1))
@@ -69,7 +68,7 @@ int main()
 		}
 		if (IsKeyPressed(KEY_F2))
 		{
-			isGrid = !isGrid;
+			grid.isActive = !grid.isActive;
 		}
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 		{
@@ -98,14 +97,14 @@ int main()
 		BeginMode2D(mainCamera);
 		ClearBackground(bgColor);
 
-		if (isGrid)
-			DrawUnifiedGrid2D(gridSize, spacing, gridColor, gridThickness, true);
-		HooverGridCell(GetMouseInfo().GridPos.x, GetMouseInfo().GridPos.y, spacing, LIGHTGRAY);
+		if (grid.isActive)
+			DrawUnifiedGrid2D(grid.size, grid.spacing, grid.color, grid.lineThickness, true);
+		HooverGridCell(GetMouseInfo().GridPos.x, GetMouseInfo().GridPos.y, grid.spacing, LIGHTGRAY);
 
 		// DRAW EXISTING CELLS
 		for (int i = 0; i < cellArrayLength; i++)
 		{
-			DrawCell(cellArrayPtr[i].x, cellArrayPtr[i].y, spacing, WHITE);
+			DrawCell(cellArrayPtr[i].x, cellArrayPtr[i].y, grid.spacing, WHITE);
 		}
 		// POSTPROCESS CANVAS
 

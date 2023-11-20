@@ -13,4 +13,6 @@ void InitializeGrid()
     grid.isActive = true;
 }
 
+Grid GetGrid() { return grid; }
+
 void SetGridActive(bool state) { grid.isActive = state; }
