@@ -5,12 +5,15 @@
 
 #include <raylib.h>
 #include "../logic/grid_utils.h"
+#include <stdbool.h>
 
-typedef struct {
+typedef struct
+{
     int size;
-	int spacing;
+    int spacing;
+    float lineThickness;
+    Color color;
+    bool isActive;
 } Grid;
-
-extern Grid GRID;
 
 #endif
