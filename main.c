@@ -1,18 +1,14 @@
 // Copyright (C) Arkadiusz Choruży
 
-#include <stdio.h>
 #include <stdbool.h>
-#include <math.h>
 #include <stdlib.h>
 
 #include <raylib.h>
-#include <raymath.h>
 #include <rlgl.h>
 
+#include "./src/app/window.h"
 #include "./src/logic/automata.h"
 #include "./src/logic/cell.h"
-#include "./src/logic/cell_utils.h"
-#include "./src/logic/rules.h"
 #include "./src/logic/grid.h"
 #include "./src/logic/grid_utils.h"
 #include "./src/draw/draw_grid.h"
@@ -22,25 +18,11 @@
 
 int main()
 {
-	const int screenWidth = 800;
-	const int screenHeight = 600;
-
-	Color bgColor = {21, 30, 39, 255};
-
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
-	InitWindow(screenWidth, screenHeight, "C Game of Life");
-	SetWindowMinSize(screenWidth, screenHeight);
-	SetTargetFPS(60);
-
-	Camera2D mainCamera = {0};
-	mainCamera.target = (Vector2){-screenWidth / 2, -screenHeight / 2}; // camera pivot, left top
-	mainCamera.zoom = 1.f;
-
-	// Runtime config
+	InitializeWindow();
 	InitializeGrid();
 	Grid grid = GetGrid();
 
-	float screenMargin = 25.f;
+	// float screenMargin = 25.f;
 	float gridHalfWidth = grid.size * grid.spacing / 2;
 
 	// Logic
@@ -55,13 +37,13 @@ int main()
 
 	while (!WindowShouldClose())
 	{
-		UpdateMouseInfo(mainCamera, grid.spacing);
+		UpdateMouseInfo(GetWindow().camera, grid.spacing);
 
 		int monitor = GetCurrentMonitor();
 		if (IsKeyPressed(KEY_F1))
 		{
 			if (IsWindowFullscreen())
-				SetWindowSize(screenWidth, screenHeight);
+				SetWindowSize(GetWindow().width, GetWindow().height);
 			else
 				SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
 			ToggleFullscreen();
@@ -72,10 +54,7 @@ int main()
 		}
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 		{
-			mainCamera.offset = Vector2Clamp(
-				Vector2Add(mainCamera.offset, GetMouseDelta()),
-				(Vector2){-gridHalfWidth + (screenWidth / 2) - screenMargin, -gridHalfWidth + (screenHeight / 2) - screenMargin},
-				(Vector2){gridHalfWidth - (screenWidth / 2) + screenMargin, gridHalfWidth - (screenHeight / 2) + screenMargin});
+			UpdateCameraOffset(gridHalfWidth, gridHalfWidth);
 		}
 		if (IsKeyPressed(KEY_SPACE))
 			isPause = !isPause;
@@ -94,8 +73,8 @@ int main()
 
 		// DRAW CANVAS
 		BeginDrawing();
-		BeginMode2D(mainCamera);
-		ClearBackground(bgColor);
+		BeginMode2D(GetWindow().camera);
+		ClearBackground(GetWindow().bgColor);
 
 		if (grid.isActive)
 			DrawUnifiedGrid2D(grid.size, grid.spacing, grid.color, grid.lineThickness, true);
@@ -111,7 +90,7 @@ int main()
 		// DRAW UI
 		{
 			Color color = isPause ? RED : GREEN;
-			Vector2 screenPos = GetScreenToWorld2D((Vector2){screenWidth - 50, screenHeight - 50}, mainCamera);
+			Vector2 screenPos = GetScreenToWorld2D((Vector2){GetWindow().width - 50, GetWindow().height - 50}, GetWindow().camera);
 			DrawCircle(screenPos.x, screenPos.y, 10.f, color);
 		}
 
