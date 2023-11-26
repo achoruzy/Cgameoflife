@@ -2,9 +2,12 @@
 
 #include "canvas.h"
 
-void DrawCanvas(Cell *cellArrayPtr, int cellArrayLength, bool isPause)
+void DrawCanvas()
 {
     Grid grid = GetGrid();
+    CellArray cellArray = GetMainCellArray();
+    Cell *cellArrayPtr = cellArray.arrayPtr;
+    int cellArrayLength = cellArray.length;
 
     BeginDrawing();
     BeginMode2D(GetWindow().camera);
@@ -23,7 +26,7 @@ void DrawCanvas(Cell *cellArrayPtr, int cellArrayLength, bool isPause)
 
     // DRAW UI
     {
-        Color color = isPause ? RED : GREEN;
+        Color color = GetInputFlags().isPause ? RED : GREEN;
         Vector2 screenPos = GetScreenToWorld2D((Vector2){GetWindow().width - 50, GetWindow().height - 50}, GetWindow().camera);
         DrawCircle(screenPos.x, screenPos.y, 10.f, color);
     }

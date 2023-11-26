@@ -2,45 +2,35 @@
 
 #include "cell_utils.h"
 
-Cell *CellArray(int size)
-{
-    Cell *cellPtr = calloc(size, sizeof(Cell));
-    if (cellPtr == NULL)
-    {
-        printf("Error: Cell pointers occured NULL");
-        exit(EXIT_FAILURE);
-    }
-    return cellPtr;
-}
-
-void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 mouseGridPos)
+void UpdateCellArray(CellArray cellArray, Vector2 mouseGridPos)
 {
     // check for already exist and remove cell if exists
     bool removed = false;
-    for (int i = 0; i < *cellArrayLengthPtr; i++)
+    int length = cellArray.length;
+    for (int i = 0; i < length; i++)
     {
-        Cell currentCell = (*cellArray)[i];
+        Cell currentCell = cellArray.arrayPtr[i];
         if (currentCell.x == (int)mouseGridPos.x && currentCell.y == (int)mouseGridPos.y)
         {
             // TODO: remove works now as UNDO
-            (*cellArrayLengthPtr)--;
+            length--;
             removed = true;
         }
     }
     // append new cell
     if (!removed)
     {
-        (*cellArrayLengthPtr)++;
-        Cell *newArray = CellArray(*cellArrayLengthPtr);
+        length++;
+        Cell *newArray = CreateCellArray(length);
 
-        for (int i = 0; i < *cellArrayLengthPtr - 1; i++)
+        for (int i = 0; i < length - 1; i++)
         {
-            newArray[i] = (*cellArray)[i];
+            newArray[i] = cellArray.arrayPtr[i];
         }
-        newArray[*cellArrayLengthPtr - 1] = (Cell){(int)mouseGridPos.x, (int)mouseGridPos.y, false, 0};
+        newArray[length - 1] = (Cell){(int)mouseGridPos.x, (int)mouseGridPos.y, false, 0};
 
-        free(*cellArray);
-        *cellArray = newArray;
+        FreeMainCellArray();
+        UpdateMainCellArray(newArray, length);
     }
 }
 
@@ -152,7 +142,7 @@ int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLengt
 
 Cell *ConcatenateCellArrays(Cell *arr1Ptr, int len1, Cell *arr2Ptr, int len2)
 {
-    Cell *resultArrPtr = CellArray(len1 + len2);
+    Cell *resultArrPtr = CreateCellArray(len1 + len2);
     for (int i = 0; i < len1; i++)
         resultArrPtr[i] = arr1Ptr[i];
     for (int i = 0; i < len2; i++)

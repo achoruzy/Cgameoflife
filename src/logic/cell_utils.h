@@ -11,11 +11,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-// Function for creting CellArray struct variable
-Cell *CellArray(int size);
-
 // Updates given cell array on user input with given grid position, spawns new or deletes existing one.
-void UpdateCellArray(Cell **cellArray, int *cellArrayLengthPtr, Vector2 gridPos);
+void UpdateCellArray(CellArray cellArray, Vector2 mouseGridPos);
 
 // Checks if cell in given xy position is empty
 bool IsCellEmpty(Cell *array, int arrLenght, int x, int y);

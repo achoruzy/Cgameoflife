@@ -5,6 +5,7 @@
 
 #include "window.h"
 #include "../input/mouse.h"
+#include "../input/input.h"
 #include "../logic/grid.h"
 #include "../logic/cell.h"
 #include "../draw/draw_grid.h"
@@ -13,6 +14,6 @@
 #include <raylib.h>
 #include <rlgl.h>
 
-void DrawCanvas(Cell *cellArrayPtr, int cellArrayLength, bool isPause);
+void DrawCanvas();
 
 #endif

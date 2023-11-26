@@ -3,10 +3,10 @@
 #ifndef AUTOMATA_H_
 #define AUTOMATA_H_
 
-#include "cell.h"
 #include "cell_utils.h"
+#include "cell.h"
 
 // Runc cell automata calculations and updates given data.
-void RunAutomata(Cell **cellArrayPtr, int *cellArrayLength);
+void RunAutomata();
 
 #endif

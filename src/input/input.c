@@ -6,7 +6,7 @@ static InputFlags inputFlags;
 
 void InitializeInput()
 {
-    inputFlags.isPause = false;
+    inputFlags.isPause = true;
 }
 
 InputFlags GetInputFlags() { return inputFlags; }
@@ -22,11 +22,11 @@ void ProcessInput()
         ProcessCameraMove();
     if (IsKeyPressed(KEY_SPACE))
         ProcessAutomataPause();
-    // if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-    //     ProcessUpdaateCellArray();
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        ProcessUpdateCellArray();
 }
 
-static void ProcessToggleFullscreen()
+static void ProcessToggleFullscreen() // TODO: return to window is buggy
 {
     if (IsWindowFullscreen())
         SetWindowSize(GetWindow().width, GetWindow().height);
@@ -56,9 +56,10 @@ static void ProcessAutomataPause()
     inputFlags.isPause = !inputFlags.isPause;
 }
 
-// static void ProcessUpdaateCellArray()
-// {
-//     Cell *cellArrayPtr = GetCellArrayPtr();
-//     int cellArrayLength = GetCellArrayLength();
-//     UpdateCellArray(&cellArrayPtr, &cellArrayLength, GetMouseInfo().GridPos);
-// }
+static void ProcessUpdateCellArray()
+{
+    CellArray cellArray = GetMainCellArray();
+    Cell *cellArrayPtr = cellArray.arrayPtr;
+    int cellArrayLength = cellArray.length;
+    UpdateCellArray(cellArray, GetMouseInfo().GridPos);
+}
