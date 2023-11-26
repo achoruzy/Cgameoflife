@@ -4,17 +4,24 @@
 #define INPUT_H_
 
 #include <stdbool.h>
+#include <raylib.h>
+
+#include "../input/mouse.h"
+#include "../app/window.h"
+#include "../logic/grid.h"
 
 typedef struct
 {
     bool isPause;
 } InputFlags;
 
-void InitializeUI()
-{
-    inputFlags.isPause = false;
-}
+void InitializeInput();
+InputFlags GetInputFlags();
+void ProcessInput();
 
-InputFlags GetInputFlags()
+static void ProcessToggleFullscreen();
+static void ProcessToggleGridActive();
+static void ProcessCameraMove();
+static void ProcessAutomataPause();
 
 #endif

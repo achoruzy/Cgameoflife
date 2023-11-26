@@ -13,20 +13,18 @@
 #include "./src/logic/grid.h"
 #include "./src/logic/grid_utils.h"
 #include "./src/input/mouse.h"
+#include "./src/input/input.h"
 
 int main()
 {
 	InitializeWindow();
+	InitializeInput();
 	InitializeGrid();
 	Grid grid = GetGrid();
 
-	float gridHalfWidth = grid.size * grid.spacing / 2;
-
-	// Logic
 	int cellArrayLength = 0;
 	Cell *cellArrayPtr = CellArray(cellArrayLength);
 
-	// UI flags
 	bool isPause = true;
 
 	// Time
@@ -34,42 +32,21 @@ int main()
 
 	while (!WindowShouldClose())
 	{
-		UpdateMouseInfo(GetWindow().camera, grid.spacing);
+		logicCooldown += GetFrameTime();
+		ProcessInput();
 
-		int monitor = GetCurrentMonitor();
-		if (IsKeyPressed(KEY_F1))
-		{
-			if (IsWindowFullscreen())
-				SetWindowSize(GetWindow().width, GetWindow().height);
-			else
-				SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
-			ToggleFullscreen();
-		}
-		if (IsKeyPressed(KEY_F2))
-		{
-			grid.isActive = !grid.isActive;
-		}
-		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
-		{
-			UpdateCameraOffset(gridHalfWidth, gridHalfWidth);
-		}
-		if (IsKeyPressed(KEY_SPACE))
-			isPause = !isPause;
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) // can add or remove at least one at a time
 			UpdateCellArray(&cellArrayPtr, &cellArrayLength, GetMouseInfo().GridPos);
 
-		// Time management
-		logicCooldown += GetFrameTime();
-
 		// MAIN LOGIC
-		if (!isPause && logicCooldown > 0.2)
+		if (!GetInputFlags().isPause && logicCooldown > 0.2)
 		{
 			logicCooldown = 0;
 			RunAutomata(&cellArrayPtr, &cellArrayLength);
 		}
 
 		// DRAW CANVAS
-		DrawCanvas(cellArrayPtr, cellArrayLength, isPause);
+		DrawCanvas(cellArrayPtr, cellArrayLength, GetInputFlags().isPause);
 	}
 	// Heap cleanup
 	free(cellArrayPtr);
