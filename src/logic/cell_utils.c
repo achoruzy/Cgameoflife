@@ -20,6 +20,7 @@ void UpdateCellArray(CellArray cellArray, Vector2 mouseGridPos)
     // append new cell
     if (!removed)
     {
+        PlaySoundSpawn();
         length++;
         Cell *newArray = CreateCellArray(length);
 
@@ -91,6 +92,8 @@ int HandleExistingCells(Cell **survivedArrayPtr, Cell *cellArrayPtr, int cellArr
             countSurvived++;
         }
     }
+    if (countSurvived < cellArrayLength)
+        PlaySoundDeath();
     return countSurvived;
 }
 
@@ -137,6 +140,8 @@ int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLengt
             }
         }
     }
+    if (countSpawned > 0)
+        PlaySoundSpawn();
     return countSpawned;
 }
 

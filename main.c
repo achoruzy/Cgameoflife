@@ -12,10 +12,12 @@
 #include "./src/logic/cell.h"
 #include "./src/logic/grid.h"
 #include "./src/input/input.h"
+#include "./src/sound/sound.h"
 
 int main()
 {
 	InitializeWindow();
+	InitializeAudio();
 	InitializeInput();
 	InitializeGrid();
 	InitializeMainCellArray();
@@ -36,6 +38,7 @@ int main()
 	}
 	// Heap cleanup
 	FreeMainCellArray();
+	DeinitializeAudio();
 	CloseWindow();
 	return 0;
 }

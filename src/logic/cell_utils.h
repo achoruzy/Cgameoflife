@@ -5,6 +5,7 @@
 
 #include "cell.h"
 #include "rules.h"
+#include "../sound/sound.h"
 
 #include <raylib.h>
 #include <stdlib.h>
