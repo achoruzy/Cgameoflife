@@ -21,6 +21,7 @@ int main()
 	InitializeInput();
 	InitializeGrid();
 	InitializeMainCellArray();
+	InitializeCanvas();
 
 	double logicCooldown = 0;
 	while (!WindowShouldClose())
@@ -38,6 +39,7 @@ int main()
 	}
 	// Heap cleanup
 	FreeMainCellArray();
+	DeinitializeCanvas();
 	DeinitializeAudio();
 	CloseWindow();
 	return 0;

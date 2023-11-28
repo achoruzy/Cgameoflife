@@ -14,6 +14,8 @@
 #include <raylib.h>
 #include <rlgl.h>
 
+void InitializeCanvas();
+void DeinitializeCanvas();
 void DrawCanvas();
 
 #endif
