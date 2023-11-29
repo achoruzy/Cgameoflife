@@ -2,6 +2,8 @@
 
 #include "canvas.h"
 
+static Color GetCellColor(int age);
+
 static Shader postprocess;
 static RenderTexture2D target;
 
@@ -30,7 +32,8 @@ void DrawCanvas()
         {
             for (int i = 0; i < cellArrayLength; i++)
             {
-                DrawCell(cellArrayPtr[i].x, cellArrayPtr[i].y, grid.spacing, WHITE);
+                Color color = GetCellColor(cellArrayPtr[i].age);
+                DrawCell(cellArrayPtr[i].x, cellArrayPtr[i].y, grid.spacing, color);
             }
         }
         EndMode2D();
@@ -61,4 +64,13 @@ void DrawCanvas()
     EndMode2D();
     DrawFPS(10, 10);
     EndDrawing();
+}
+
+static Color GetCellColor(int age)
+{
+    int c = 20 * age;
+    int r = Clamp(50 + c, 50, 255);
+    int g = Clamp(255 - c, 50, 255);
+    int b = Clamp(c, 70, 255);
+    return (Color){r, g, b, 255};
 }

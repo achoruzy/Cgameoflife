@@ -28,7 +28,7 @@ void UpdateCellArray(CellArray cellArray, Vector2 mouseGridPos)
         {
             newArray[i] = cellArray.arrayPtr[i];
         }
-        newArray[length - 1] = (Cell){(int)mouseGridPos.x, (int)mouseGridPos.y, false, 0};
+        newArray[length - 1] = (Cell){(int)mouseGridPos.x, (int)mouseGridPos.y, false, 0, 0};
 
         FreeMainCellArray();
         UpdateMainCellArray(newArray, length);
@@ -86,14 +86,17 @@ int HandleExistingCells(Cell **survivedArrayPtr, Cell *cellArrayPtr, int cellArr
 
         if (isToLive(currentCell.neighbours)) // if obey then it stays and appends to new array
         {
-            currentCell.isDead = true;
+            currentCell.isDead = false;
+            currentCell.age++;
             (*survivedArrayPtr)[countSurvived] = currentCell;
 
             countSurvived++;
         }
     }
-    if (countSurvived < cellArrayLength)
-        PlaySoundDeath();
+    // if (countSurvived < cellArrayLength * 0.6)
+    //     PlaySoundDeath();
+    // else
+    //     PlaySoundSpawn();
     return countSurvived;
 }
 
@@ -132,7 +135,7 @@ int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLengt
                     int emptyCellNeighbors = CellNeighborsQty(x, y, cellArrayPtr, cellArrayLength);
                     if (isToRevive(emptyCellNeighbors))
                     {
-                        Cell spawnedCell = {x, y, false, emptyCellNeighbors};
+                        Cell spawnedCell = {x, y, false, emptyCellNeighbors, 0};
                         (*spawnedArrayPtr)[countSpawned] = spawnedCell;
                         countSpawned++;
                     }
@@ -140,8 +143,6 @@ int SpawnNewCells(Cell **spawnedArrayPtr, Cell *cellArrayPtr, int cellArrayLengt
             }
         }
     }
-    if (countSpawned > 0)
-        PlaySoundSpawn();
     return countSpawned;
 }
 

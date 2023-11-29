@@ -13,6 +13,7 @@ typedef struct
     int y;
     bool isDead;
     int neighbours;
+    int age;
 } Cell;
 
 typedef struct
