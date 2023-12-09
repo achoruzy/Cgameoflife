@@ -5,20 +5,10 @@
 void UpdateCellArray(CellArray cellArray, Vector2 mouseGridPos)
 {
     // check for already exist and remove cell if exists
-    bool removed = false;
+    bool isCellEmpty = IsCellEmpty(cellArray.arrayPtr, cellArray.length, mouseGridPos.x, mouseGridPos.y);
+
     int length = cellArray.length;
-    for (int i = 0; i < length; i++)
-    {
-        Cell currentCell = cellArray.arrayPtr[i];
-        if (currentCell.x == (int)mouseGridPos.x && currentCell.y == (int)mouseGridPos.y)
-        {
-            // TODO: remove works now as UNDO
-            length--;
-            removed = true;
-        }
-    }
-    // append new cell
-    if (!removed)
+    if (isCellEmpty)
     {
         PlaySoundSpawn();
         length++;
@@ -30,6 +20,28 @@ void UpdateCellArray(CellArray cellArray, Vector2 mouseGridPos)
         }
         newArray[length - 1] = (Cell){(int)mouseGridPos.x, (int)mouseGridPos.y, false, 0, 0};
 
+        FreeMainCellArray();
+        UpdateMainCellArray(newArray, length);
+    }
+    else
+    {
+        length--;
+        Cell *newArray = CreateCellArray(length);
+        int arrPos = 0;
+
+        for (int i = 0; i < length - 1; i++)
+        {
+            Cell currentCell = cellArray.arrayPtr[i];
+            if (currentCell.x == (int)mouseGridPos.x && currentCell.y == (int)mouseGridPos.y)
+            {
+                continue;
+            }
+            else
+            {
+                newArray[arrPos] = cellArray.arrayPtr[i];
+                arrPos++;
+            }
+        }
         FreeMainCellArray();
         UpdateMainCellArray(newArray, length);
     }
