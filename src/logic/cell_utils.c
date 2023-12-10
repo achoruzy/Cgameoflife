@@ -25,25 +25,20 @@ void UpdateCellArray(CellArray cellArray, Vector2 mouseGridPos)
     }
     else
     {
-        length--;
-        Cell *newArray = CreateCellArray(length);
+        Cell *newArray = CreateCellArray(length - 1);
         int arrPos = 0;
 
-        for (int i = 0; i < length - 1; i++)
+        for (int i = 0; i < length; i++)
         {
             Cell currentCell = cellArray.arrayPtr[i];
-            if (currentCell.x == (int)mouseGridPos.x && currentCell.y == (int)mouseGridPos.y)
-            {
-                continue;
-            }
-            else
+            if (currentCell.x != (int)mouseGridPos.x || currentCell.y != (int)mouseGridPos.y)
             {
                 newArray[arrPos] = cellArray.arrayPtr[i];
                 arrPos++;
             }
         }
         FreeMainCellArray();
-        UpdateMainCellArray(newArray, length);
+        UpdateMainCellArray(newArray, length - 1);
     }
 }
 
