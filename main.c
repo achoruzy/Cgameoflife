@@ -6,6 +6,9 @@
 #include <raylib.h>
 #include <rlgl.h>
 
+#define RAYGUI_IMPLEMENTATION
+#include "./src/raygui.h"
+
 #include "./src/app/window.h"
 #include "./src/app/canvas.h"
 #include "./src/logic/automata.h"
@@ -22,6 +25,8 @@ int main()
 	InitializeGrid();
 	InitializeMainCellArray();
 	InitializeCanvas();
+
+	GuiLoadStyleDefault();
 
 	double logicCooldown = 0;
 	while (!WindowShouldClose())

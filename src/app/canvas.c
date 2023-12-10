@@ -2,6 +2,9 @@
 
 #include "canvas.h"
 
+#define RAYGUI_STATIC
+#include "../raygui.h"
+
 static Color GetCellColor(int age);
 
 static Shader postprocess;
@@ -63,6 +66,10 @@ void DrawCanvas()
     }
     EndMode2D();
     DrawFPS(10, 10);
+
+    GuiLoadStyleDefault();
+    GuiLabel((Rectangle){50, GetWindow().height - 40, GetWindow().width - 50, 30}, "F1 - fullscreen toggle, F2 - grid visibility toggle");
+
     EndDrawing();
 }
 
