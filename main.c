@@ -33,13 +33,11 @@ int main()
 	{
 		logicCooldown += GetFrameTime();
 		ProcessInput();
-		// MAIN LOGIC
 		if (!GetInputFlags().isPause && logicCooldown > 0.2)
 		{
 			logicCooldown = 0;
 			RunAutomata();
 		}
-		// DRAW CANVAS
 		DrawCanvas();
 	}
 	// Heap cleanup
